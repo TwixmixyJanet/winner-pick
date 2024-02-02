@@ -1,6 +1,6 @@
 const User = require('./User');
-const Recipe = require('./Recipe');
-const Family = require('./Family');
+const Game = require('./Game');
+const Group = require('./Group');
 
 
-module.exports = { User, Recipe, Family};
+module.exports = { User, Game, Group};
