@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 const bcrypt = require('bcrypt');
-const Recipe = require('./Recipe');
-const Family = require('./Family');
+const Game = require('./Game');
+const Group = require('./Group');
 
 const userSchema = new Schema({
   username: {
@@ -32,21 +32,21 @@ const userSchema = new Schema({
     required: true,
     minlength: 5
   },
-  families: [{
+  groups: [{
     type: Schema.Types.ObjectId,
-    ref: 'Family'
+    ref: 'Group'
   },
   ],
-  recipes: [
+  games: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Recipe'
+      ref: 'Game'
     },
   ],
-  pinnedRecipes: [
+  joinedGames: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Recipe'
+      ref: 'Game'
     },
   ]
 });

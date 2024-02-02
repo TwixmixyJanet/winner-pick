@@ -41,7 +41,7 @@ For example, it will be based off of the reality TV show, Survivor.
     - Number of cast members (those who are on the TV show)
     - Number of players (Users) - is this needed??
     - Name of each cast member
-    - How many sessions the game will last - is this needed??
+    - How many sessions the game will last - is this needed?? - this would be the same as how many cast members there are.
 3. Users must be able to join a group for a fantasy reality TV game
 4. Users in the Group must be able to draft befor the game begins
     - Round-robin the Users can select a cast member, until all are selected

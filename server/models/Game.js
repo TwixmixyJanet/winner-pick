@@ -3,7 +3,7 @@ const dateFormat = require('../utils/dateFormat');
 
 const { Schema } = mongoose;
 
-const recipeSchema = new Schema({
+const gameSchema = new Schema({
 name: {
   type: String,
   required: true,
@@ -14,20 +14,16 @@ photo: {
   required: true,
   trim: true
 },
-cookingTime: {
+description: {
   type: String,
   required: true,
 },
-instructions:{
-  type: String,
+castMembers:{
+  type: [String],
   required: true
 },
-ingredients: {
-  type: String,
-  required: true
-},
-servingSize: {
-  type: String,
+numMembers: {
+  type: Number,
   required: true
 },
 author:{ 
@@ -39,13 +35,13 @@ createdAt:{
   default: Date.now,
   get: (timestamp) => dateFormat(timestamp),
 },
-families: 
+groups: 
   {
     type: Schema.Types.ObjectId,
-    ref: 'Family'
+    ref: 'Group'
   }
 });
 
-const Recipe = mongoose.model('Recipe', recipeSchema);
+const Game = mongoose.model('Game', gameSchema);
 
-module.exports = Recipe;
+module.exports = Game;
