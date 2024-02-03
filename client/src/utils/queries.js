@@ -11,22 +11,21 @@ export const QUERY_USER = gql`
       lastName
       username
       email
-      families {
+      groups {
         _id
         name
       }
-      recipes {
+      games {
         _id
         name
         photo
-        cookingTime
-        instructions
-        ingredients
-        servingSize
+        description
+        castMembers
+        numMembers
         author
         createdAt
       }
-      pinnedRecipes {
+      joinedGames {
         _id
       }
     }
