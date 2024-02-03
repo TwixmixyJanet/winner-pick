@@ -96,11 +96,11 @@ function Game() {
                   <div className="row">
                     <div className="col-md-6 mb-1">
                       <div className="field-title m-0">Description:</div>{" "}
-                      {game.description} context
+                      {game.description}
                     </div>
                     <div className="col-md-6 mb-1">
                       <div className="field-title m-0">Cast Members:</div>{" "}
-                      {game.castMembers} members
+                      {game.castMembers}
                     </div>
                     <div className="col-md-6 mt-5 mb-2">
                       <div className="field-title m-0  d-flex text-start">
