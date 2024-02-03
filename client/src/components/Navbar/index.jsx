@@ -67,32 +67,25 @@ const NavBar = () => {
               </Link>
             </li>
             {Auth.loggedIn() ? (
-              (
-                <> 
+              <>
                 <li className="nav-item">
                   <Link className="nav-link" to="/dashboard">
                     Dashboard
                   </Link>
                 </li>
-        
+
                 <li className="nav-item">
-                  <Link className="nav-link" to="/pinnedrecipes">
-                    Pinned Recipe
+                  <Link className="nav-link" to="/joinedgames">
+                    Joined Games
                   </Link>
                 </li>
-                </>
-               
-              )
+              </>
             ) : (
               <></>
             )}
           </ul>
 
-          <Link
-            to="/search"
-            className="btn"
-            style={{ width: "auto" }}
-          >
+          <Link to="/search" className="btn" style={{ width: "auto" }}>
             Search
           </Link>
 
@@ -107,11 +100,7 @@ const NavBar = () => {
             </button>
           ) : (
             // If user is not authenticated, show login button
-            <Link
-              to="/login"
-              className="btn"
-              style={{ width: "auto" }}
-            >
+            <Link to="/login" className="btn" style={{ width: "auto" }}>
               Login
             </Link>
           )}
