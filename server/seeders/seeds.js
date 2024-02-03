@@ -1,103 +1,78 @@
 const db = require('../config/connection');
-const { User, Family, Recipe } = require('../models');
+const { User, Group, Game } = require('../models');
 const cleanDB = require('./cleanDB');
 
 db.once('open', async () => {
   try {
     await cleanDB('User', 'users');
-    await cleanDB('Recipe', 'recipes');
-    await cleanDB('Family', 'families');
+    await cleanDB('Game', 'games');
+    await cleanDB('Group', 'groups');
 
-    const families = await Family.insertMany([
+    const groups = await Group.insertMany([
       {
-        name: "Kernighan"
+        name: "Weblins"
       },
       {
-        name: "Kanat-Alexander"
+        name: "The Tribe Has Spoken"
       },
       {
-        name: "Bull"
+        name: "Bitchelorette"
       },
       {
-        name: "Berard"
+        name: "Traitors"
       },
       {
-        name: "Kay"
+        name: "Alligabler"
       },
       {
-        name: "Thomas"
+        name: "ChampagneAllDay"
       },
       {
-        name: "Knuth"
+        name: "Jeff4Ever"
       }
     ]);
 
-    console.log('👪 families seeded 👪');
+    console.log('👪 groups seeded 👪');
 
-    const recipes = await Recipe.insertMany([
+    const games = await Game.insertMany([
       {
-        name: "Spaghetti Bolognese",
-        photo: "https://github.com/abenedetti27/recipe-rolodex/assets/117195025/360b8d3c-3927-4889-819b-062629e20bee",
-        cookingTime: 30,
-        instructions: "Boil spaghetti. Brown ground beef. Mix with tomato sauce. Serve over spaghetti.",
-        ingredients: "Spaghetti, ground beef, tomato sauce",
-        servingSize: 4,
+        name: "Survivor 46",
+        photo: "https://m.media-amazon.com/images/M/MV5BYjFhYjQzMDUtNGYxZC00YjliLTlmYzAtODE1ZTU1M2ExY2I0XkEyXkFqcGdeQXVyMTE0MzQwMjgz._V1_QL75_UY281_CR31,0,500,281_.jpg",
+        description: "Survivor Season 46 returns to Mamanuca Island, Fiji, with beautiful beaches and clear water.",
+        castMembers: ["Ben Katzman", "Bhanu Gopal", "Charlie Davis", "David Jelinsky", "Hunter McKnight", "Jem Hu Adams", "Jessica Chong", "Kenzie Veurink", "Liz Wilcox", "Maria Shrime Gonzalez", "Moriah Gaynor", "Quintavius Burdette", "Randen Montalvo", "Sodasia Thompson", "Tevin Davis", "Tiffany Nicole Ervin", "Tim Spicer", "Venus Vafa"],
+        numMembers: 18,
         author: "B-King",
-        families: [families[0]._id]
+        groups: [groups[0]._id]
       },
       {
-        name: "Chicken Alfredo",
-        photo: "https://github.com/abenedetti27/recipe-rolodex/assets/117195025/7b6ab1fa-3ad0-4cff-aa32-1c256f23a5f5",
-        cookingTime: 40,
-        instructions: "Cook chicken. Prepare Alfredo sauce. Mix with cooked pasta. Garnish with parsley.",
-        ingredients: "Chicken breasts, fettuccine pasta, Alfredo sauce",
-        servingSize: 6,
+        name: "The Bachelor",
+        photo: "https://m.media-amazon.com/images/M/MV5BZmYwMzUxZjctMjUzZi00YzY2LWJjNzItNzQwYjM4MzU4MzRiXkEyXkFqcGdeQXVyMTE0MzQwMjgz._V1_QL75_UY281_CR31,0,500,281_.jpg",
+        description: "The Bachelor is an American dating and relationship reality television series that debuted on March 25, 2002, on ABC.",
+        castMembers: ["Clayton Echard"],
+        numMembers: 1,
+        author: "Barbie",
+        groups: [groups[1]._id]
+      },
+      {
+        name: "The Bachelorette",
+        photo: "https://m.media-amazon.com/images/M/MV5BZmYwMzUxZjctMjUzZi00YzY2LWJjNzItNzQwYjM4MzU4MzRiXkEyXkFqcGdeQXVyMTE0MzQwMjgz._V1_QL75_UY281_CR31,0,500,281_.jpg",
+        description: "The Bachelorette is an American reality television dating game show that debuted on ABC on January 8, 2003.",
+        castMembers: ["Michelle Young"],
+        numMembers: 1,
         author: "Superman",
-        families: [families[2]._id]
+        groups: [groups[2]._id]
       },
       {
-        name: "Vegetarian Stir Fry",
-        photo: "https://github.com/abenedetti27/recipe-rolodex/assets/117195025/d7ca02dd-7afe-494c-b0e0-f06c9e62a996",
-        cookingTime: 25,
-        instructions: "Stir-fry assorted vegetables. Add tofu. Season with soy sauce. Serve hot.",
-        ingredients: "Broccoli, bell peppers, tofu, soy sauce",
-        servingSize: 3,
-        author: "EVBcooks",
-        families: [families[3]._id]
-      },
-      {
-          name: "Chicken Parmesan",
-          photo: "https://github.com/abenedetti27/recipe-rolodex/assets/117195025/f19b9879-c8fd-448a-a896-0e39e31c94b4",
-          cookingTime: 45,
-          instructions: "Bread chicken. Fry chicken. Add tomato sauce and cheese. Bake until cheese is melted.",
-          ingredients: "Chicken breasts, bread crumbs, tomato sauce, mozzarella cheese",
-          servingSize: 4,
-          author: "KissUncleKay",
-          families: [families[4]._id]
-      },
-      {
-          name: "Chicken Tikka Masala",
-          photo: "https://github.com/abenedetti27/recipe-rolodex/assets/117195025/4abe79c7-2f43-4615-87af-acc3626f6bf9",
-          cookingTime: 60,
-          instructions: "Marinate chicken. Bake chicken. Add tomato sauce and spices. Serve with rice.",
-          ingredients: "Chicken breasts, tomato sauce, spices, rice",
-          servingSize: 4,
-          author: "D-Time",
-          families: [families[5]._id]
-      }
-      ,
-      {
-          name: "Roast Beef",
-          photo: "https://github.com/abenedetti27/recipe-rolodex/assets/117195025/36621a27-f49d-4db4-b2dd-b31768211721",
-          cookingTime: 120,
-          instructions: "Season beef. Bake beef. Serve with potatoes and vegetables.",
-          ingredients: "Beef, potatoes, vegetables",
-          servingSize: 6,
-          author: "KissAuntKay",
-          families: [families[2]._id]
+        name: "The Amazing Race",
+        photo: "https://m.media-amazon.com/images/M/MV5BZmYwMzUxZjctMjUzZi00YzY2LWJjNzItNzQwYjM4MzU4MzRiXkEyXkFqcGdeQXVyMTE0MzQwMjgz._V1_QL75_UY281_CR31,0,500,281_.jpg",
+        description: "The Amazing Race is back for its 33rd season! This season, 11 teams will embark on a trek around the world.",
+        castMembers: ["Phil Keoghan"],
+        numMembers: 1,
+        author: "KissUncleKay",
+        groups: [groups[3]._id]
       }
     ]);
-    console.log('🍝 recipes seeded 🍝');
+    console.log('🏆 games seeded 🏆');
 
     const users = await User.insertMany([
       {
@@ -106,8 +81,8 @@ db.once('open', async () => {
         lastName: "Kernighan",
         email: "bkernighan@techfriends.dev",
         password: "password01",
-        families: [families[0]._id],
-        recipes: [recipes[0]._id],
+        groups: [groups[0]._id],
+        games: [games[0]._id],
       },
       {
         username: "MaxCannotSpell",
@@ -115,8 +90,8 @@ db.once('open', async () => {
         lastName: "Kanat-Alexander",
         email: "mkanatalexander@techfriends.dev",
         password: "password02",
-        families: [families[1]._id],
-        recipes: [],
+        groups: [groups[1]._id],
+        games: [],
       },
       {
         username: "Barbie",
@@ -124,8 +99,8 @@ db.once('open', async () => {
         lastName: "Bull",
         email: "bbull@techfriends.dev",
         password: "password03",
-        families: [families[2]._id],
-        recipes: [recipes[5]._id],
+        groups: [groups[2]._id],
+        games: [games[3]._id],
       },
       {
         username: "Superman",
@@ -133,8 +108,8 @@ db.once('open', async () => {
         lastName: "Bull",
         email: "kbull@techfriends.dev",
         password: "password04",
-        families: [families[2]._id],
-        recipes: [recipes[1]._id],
+        groups: [groups[2]._id],
+        games: [games[1]._id],
       },
       {
         username: "EVBcooks",
@@ -142,8 +117,8 @@ db.once('open', async () => {
         lastName: "Berard",
         email: "evberard@techfriends.dev",
         password: "password05",
-        families: [families[3]._id],
-        recipes: [recipes[2]._id],
+        groups: [groups[3]._id],
+        games: [games[2]._id],
       },
       {
         username: "KissAuntKay",
@@ -151,8 +126,8 @@ db.once('open', async () => {
         lastName: "Kay",
         email: "akay@techfriends.dev",
         password: "password06",
-        families: [families[4]._id],
-        recipes: [recipes[5]._id],
+        groups: [groups[4]._id],
+        games: [games[0]._id],
       },
       {
         username: "KissUncleKay",
@@ -160,8 +135,8 @@ db.once('open', async () => {
         lastName: "Kay",
         email: "akay2@techfriends.dev",
         password: "password07",
-        families: [families[4]._id],
-        recipes: [recipes[3]._id],
+        groups: [groups[4]._id],
+        games: [games[0]._id],
       },
       {
         username: "D-Time",
@@ -169,20 +144,11 @@ db.once('open', async () => {
         lastName: "Thomas",
         email: "dthomas@techfriends.dev",
         password: "password08",
-        families: [families[5]._id],
-        recipes: [recipes[4]._id],
+        groups: [groups[5]._id],
+        games: [games[2]._id],
       },
-      {
-        username: "TheRealDonald",
-        firstName: "Donald",
-        lastName: "Knuth",
-        email: "dknuth@techfriends.dev",
-        password: "password09",
-        families: [families[6]._id],
-        recipes: [],
-      }
     ]);
-    console.log('👨‍🍳 users seeded 👩‍🍳');
+    console.log('👤 users seeded 👤');
 
   } catch (err) {
     console.error(err);
