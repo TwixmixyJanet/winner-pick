@@ -9,8 +9,8 @@ const typeDefs = `
     name: String!
     photo: String!
     description: String!
-    castMembers: String!
-    numMembers: String!
+    castMembers: [String!]
+    numMembers: Int!
     author: String!
     createdAt: String!
     groups: Group
