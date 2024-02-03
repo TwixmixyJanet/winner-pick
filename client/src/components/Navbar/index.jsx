@@ -33,7 +33,7 @@ const NavBar = () => {
   console.log("Auth.loggedIn:", Auth.loggedIn());
   return (
     <nav
-      className={`navbar navbar-expand-lg navbar-light bg-body-tertiary ${
+      className={`navbar navbar-expand-lg navbar-dark bg-custom ${
         scrolled ? "scrolled" : ""
       }`}
     >

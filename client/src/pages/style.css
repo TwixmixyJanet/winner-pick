@@ -2,10 +2,10 @@
 @import 'mdb-ui-kit/css/mdb.min.css';
 
 :root {
-  --lightpink: #f8e0e7;
-  --darkpink: #da1884;
+  --light: #e4b54b;
+  --darkblue: #2c3145;
   --white: #ffffff;
-  --mauve: #b598a3;
+  --highlight: #da6d44;
   --richblack: #0d1321;
 }
 
@@ -47,11 +47,11 @@ footer {
   position: fixed;
   bottom: 0;
   width: 100%;
-  color: var(--lightpink);
+  color: var(--light);
 }
 
 footer div{
-  background-color: var(--darkpink);
+  background-color: var(--darkblue);
   height: 2.5em;
   display: flex;
   justify-content: center;
@@ -83,11 +83,11 @@ footer div{
 .btn {
   float: right;
   width: 100%;
-  background-color: var(--lightpink);
+  background-color: var(--light);
   color: var(--richblack);
-  box-shadow: 0px 4px 4px var(--darkpink) / 0.2;
+  box-shadow: 0px 4px 4px var(--darkblue) / 0.2;
   margin: 1%;
-  border: 0.5px solid var(--darkpink);
+  border: 0.5px solid var(--darkblue);
   padding: auto;
   font-size: 1rem;
   text-align: center;
@@ -95,10 +95,10 @@ footer div{
 }
 
 .btn:hover {
-  background-color: var(--darkpink);
+  background-color: var(--darkblue);
   color: var(--white);
-  box-shadow: 0px 4px 4px var(--darkpink) / 0.2;
-  border: 0.5px solid var(--darkpink);
+  box-shadow: 0px 4px 4px var(--darkblue) / 0.2;
+  border: 0.5px solid var(--darkblue);
 }
 
 small {
@@ -126,8 +126,12 @@ small {
 }
 
 .nav-pills .nav-link.active {
-  background-color: var(--lightpink);
+  background-color: var(--light);
   color: var(--richblack);
+}
+
+.bg-custom {
+  background-color: var(--darkblue);
 }
 
 .field-title {
@@ -137,7 +141,7 @@ small {
 }
 
 .form-outline .form-control:focus ~ .form-label {
-  color: var(--darkpink);
+  color: var(--darkblue);
 }
 
 .form-helper {
@@ -146,44 +150,44 @@ small {
 }
 
 select {
-  background-color: var(--mauve);
+  background-color: var(--highlight);
   border: 0.1rem;
-  border-color: var(--darkpink);
+  border-color: var(--darkblue);
   border-radius: 5px;
   padding: 0.55%;
 }
 
 button {
-  background-color: var(--mauve);
+  background-color: var(--highlight);
   color: var(--white);
-  box-shadow: 0px 4px 4px var(--darkpink) / 0.2;
+  box-shadow: 0px 4px 4px var(--darkblue) / 0.2;
   margin: 1%;
   border-radius: 5px;
-  border: 0.5px solid var(--darkpink);
+  border: 0.5px solid var(--darkblue);
   padding: auto;
   text-align: center;
 }
 
 .dropdown-content li,
 .dropdown-content li > span {
-  background-color: var(--mauve);
+  background-color: var(--highlight);
   color: w;
 }
 
 #cloudBox {
   width: 60%;
   height: auto;
-  background-color: var(--darkpink);
+  background-color: var(--darkblue);
 }
 
 .group-badge {
-  background-color: var(--darkpink);
-  box-shadow: 0px 4px 4px var(--mauve) / 0.2;
+  background-color: var(--darkblue);
+  box-shadow: 0px 4px 4px var(--highlight) / 0.2;
 }
 
 .author-badge {
-  background-color: var(--mauve);
-  box-shadow: 0px 4px 4px var(--darkpink) / 0.2;
+  background-color: var(--highlight);
+  box-shadow: 0px 4px 4px var(--darkblue) / 0.2;
   color: var(--richblack);
 }
 
@@ -207,20 +211,20 @@ textarea{
 /* Form Outline Custom Colors ACTIVE*/
 
 .form-outline .form-control:focus~.form-notch .form-notch-leading {
-  border-top: .1rem solid var(--darkpink);
-  border-bottom: .1rem solid var(--darkpink);
-  border-left: .1rem solid var(--darkpink);
+  border-top: .1rem solid var(--darkblue);
+  border-bottom: .1rem solid var(--darkblue);
+  border-left: .1rem solid var(--darkblue);
 } 
 
 .form-outline .form-control:focus~.form-notch .form-notch-trailing {
-  border-top: .1rem solid var(--darkpink);
-  border-right: .1rem solid var(--darkpink);
-  border-bottom: .1rem solid var(--darkpink);
+  border-top: .1rem solid var(--darkblue);
+  border-right: .1rem solid var(--darkblue);
+  border-bottom: .1rem solid var(--darkblue);
 } 
 
 .form-outline .form-control:focus~.form-notch .form-notch-middle {
   border-top: 0;
-  border-bottom: .1rem solid var(--darkpink);
+  border-bottom: .1rem solid var(--darkblue);
 } 
 
 
