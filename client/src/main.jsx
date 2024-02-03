@@ -5,13 +5,13 @@ import Home from "./pages/Home.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Dashboard from "./pages/Dashboard.jsx";
-import AddRecipe from "./pages/AddRecipe.jsx";
-import FamilyRecipes from "./pages/FamilyRecipes.jsx";
+import AddGame from "./pages/AddGame.jsx";
+import GroupGames from "./pages/GroupGames.jsx";
 import Search from "./pages/Search.jsx";
 import Login from "./pages/Login.jsx";
-import Recipe from "./pages/Recipe.jsx";
-import EditRecipe from "./pages/EditRecipe.jsx";
-import PinnedRecipes from "./pages/PinnedRecipe.jsx";
+import Game from "./pages/Game.jsx";
+import EditGame from "./pages/EditGame.jsx";
+import JoinedGames from "./pages/JoinedGames.jsx";
 // Import MDB
 // Example: Adjust import path based on package structure or documentation
 import * as mdb from "mdb-ui-kit"; // lib
@@ -34,9 +34,9 @@ const router = createBrowserRouter([
         element: <Dashboard />,
       },
       {
-        path: "/addrecipe",
+        path: "/addgame",
         index: false,
-        element: <AddRecipe />,
+        element: <AddGame />,
       },
       {
         path: "/login",
@@ -44,19 +44,19 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: "/recipe/:id",
+        path: "/game/:id",
         index: false,
-        element: <Recipe />,
+        element: <Game />,
       },
       {
-        path: "/familyrecipes/:familyId",
+        path: "/groupgames/:groupId",
         index: false,
-        element: <FamilyRecipes />,
+        element: <GroupGames />,
       },
       {
-        path: "/editrecipe/:id",
+        path: "/editgame/:id",
         index: false,
-        element: <EditRecipe />,
+        element: <EditGame />,
       },
       {
         path: "/search/",
@@ -64,9 +64,9 @@ const router = createBrowserRouter([
         element: <Search />,
       },
       {
-        path: "/pinnedrecipes/",
+        path: "/joinedgames/",
         index: false,
-        element: <PinnedRecipes />,
+        element: <JoinedGames />,
       },
     ],
   },
