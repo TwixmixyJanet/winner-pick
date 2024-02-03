@@ -69,7 +69,7 @@ footer div{
   text-align: center;
 }
 
-#family-card {
+#group-card {
   width: auto;
   margin: 2%;
 }
@@ -176,7 +176,7 @@ button {
   background-color: var(--darkpink);
 }
 
-.family-badge {
+.group-badge {
   background-color: var(--darkpink);
   box-shadow: 0px 4px 4px var(--mauve) / 0.2;
 }
@@ -195,7 +195,7 @@ textarea{
   white-space: pre-wrap;
 }
 
-#recipe-image{
+#game-image{
   width: 75%;
   height: auto;
   margin: auto;
@@ -259,7 +259,7 @@ textarea{
     display: none;
   }
 
-  #family-card img{
+  #group-card img{
     display: none;
   }
 
