@@ -151,20 +151,18 @@ export default function GameForm() {
           </div>
         </div>
 
-        <div className="col-5 p-0">
-          <div data-mdb-input-init className="form-outline mb-3">
-            <input
-              type="number"
-              id="description"
-              placeholder="0"
-              className="form-control"
-              value={formData.description}
-              onChange={handleInputChange}
-            />
-            <label className="form-label" htmlFor="description">
-              Game Description
-            </label>
-          </div>
+        <div data-mdb-input-init className="form-outline mb-3">
+          <input
+            type="text"
+            id="description"
+            placeholder="0"
+            className="form-control"
+            value={formData.description}
+            onChange={handleInputChange}
+          />
+          <label className="form-label" htmlFor="description">
+            Game Description
+          </label>
         </div>
 
         <div className="col-5 p-0">

@@ -90,7 +90,7 @@ export const ADD_GAME = gql`
     $photo: String!
     $description: String!
     $castMembers: [String!]
-    $numMembers: Number!
+    $numMembers: Int!
     $author: String!
     $groupId: ID
   ) {
@@ -125,7 +125,7 @@ export const UPDATE_GAME = gql`
     $photo: String!
     $description: String!
     $castMembers: [String!]
-    $numMembers: Number!
+    $numMembers: Int!
     $author: String!
     $groupId: ID
   ) {
