@@ -4,7 +4,7 @@ const typeDefs = `
     name: String!
   }
 
-  type Recipe {
+  type Game {
     _id: ID
     name: String!
     photo: String!
