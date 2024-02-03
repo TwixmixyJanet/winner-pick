@@ -1,5 +1,5 @@
 const typeDefs = `
-  type Family {
+  type Group {
     _id: ID
     name: String!
   }
@@ -8,13 +8,12 @@ const typeDefs = `
     _id: ID
     name: String!
     photo: String!
-    cookingTime: String!
-    instructions: String!
-    ingredients: String!
-    servingSize: String!
+    description: String!
+    castMembers: String!
+    numMembers: String!
     author: String!
     createdAt: String!
-    families: Family
+    groups: Group
   }
 
   type User {
@@ -24,9 +23,9 @@ const typeDefs = `
     username: String!
     email: String!
     password: String!
-    families: [Family]
-    recipes: [Recipe]
-    pinnedRecipes: [Recipe]
+    groups: [Group]
+    games: [Game]
+    joinedGames: [Game]
   }
 
   type Auth {
@@ -35,33 +34,33 @@ const typeDefs = `
   }
 
   type Photos {
-    familyId: ID!
+    groupId: ID!
     name: String!
     photos: [String]
   }
 
   type Query {
-    recipes: [Recipe]
-    recipe(_id: ID!): Recipe
-    families: [Family]
-    family(_id: ID!): Family
-    famRecipe( familyId : ID!): [Recipe]
+    games: [Game]
+    game(_id: ID!): Game
+    groups: [Group]
+    group(_id: ID!): Group
+    groupGame( familyId : ID!): [Game]
     user(username: String!): User
-    familyMembers( familyId : ID!): [User]
-    familyRecipePhotos(username: String!): [Photos]
+    groupMembers( familyId : ID!): [User]
+    groupGamePhotos(username: String!): [Photos]
   }
 
   type Mutation {
     addUser(firstName: String!, lastName: String!, username: String!, email: String!, password: String!): Auth
     login(username: String!, password: String!): Auth
-    addFamily(name: String!): Family
-    joinFamily(familyId: ID!): User
-    leaveFamily(familyId: ID!): User
-    addRecipe(name: String!, photo: String!, cookingTime: String!, instructions: String!, ingredients: String!, servingSize: String!, author: String!, familyId: ID): Recipe
-    updateRecipe(_id: ID!, name: String, photo: String, cookingTime: String!, instructions: String, ingredients: String, servingSize: String!, author: String, familyId: ID): Recipe
-    deleteRecipe(_id: ID!): Recipe
-    pinRecipe(_id: ID!): User
-    unpinRecipe(_id: ID!): User
+    addGroup(name: String!): Group
+    joinGroup(groupId: ID!): User
+    leaveGroup(groupId: ID!): User
+    addGame(name: String!, photo: String!, description: String!, castMembers: String!, numMembers: String!, author: String!, groupId: ID): Game
+    updateGame(_id: ID!, name: String, photo: String, description: String!, castMembers: String, numMembers: String, author: String, groupId: ID): Game
+    deleteGame(_id: ID!): Game
+    joinGame(_id: ID!): User
+    leaveGame(_id: ID!): User
   }
 `;
 
