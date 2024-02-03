@@ -1,7 +1,7 @@
 {
   "name": "winner-pick",
   "version": "1.0.0",
-  "description": "",
+  "description": "Because it only counts if you pick the winner. The goal of this app is to pick the winner of a series of a reality TV show. The MVP will be to have teams draft their players and for their player to be one of the winners for all the bragging rights.",
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",
