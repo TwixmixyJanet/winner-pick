@@ -25,7 +25,6 @@ const router = createBrowserRouter([
     // error: <NoMatch />,
     children: [
       {
-        path: "*",
         index: true,
         element: <Home />,
       },
