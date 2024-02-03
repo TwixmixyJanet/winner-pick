@@ -89,8 +89,8 @@ export const ADD_GAME = gql`
     $name: String!
     $photo: String!
     $description: String!
-    $castMembers: String!
-    $numMembers: String!
+    $castMembers: [String!]
+    $numMembers: Number!
     $author: String!
     $groupId: ID
   ) {
@@ -124,8 +124,8 @@ export const UPDATE_GAME = gql`
     $name: String!
     $photo: String!
     $description: String!
-    $castMembers: String!
-    $numMembers: String!
+    $castMembers: [String!]
+    $numMembers: Number!
     $author: String!
     $groupId: ID
   ) {

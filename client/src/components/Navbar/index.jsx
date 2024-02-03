@@ -76,7 +76,7 @@ const NavBar = () => {
 
                 <li className="nav-item">
                   <Link className="nav-link" to="/joinedgames">
-                    Joined Games
+                    Games
                   </Link>
                 </li>
               </>

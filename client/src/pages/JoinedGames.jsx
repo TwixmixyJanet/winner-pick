@@ -54,7 +54,7 @@ function JoinedGames() {
 
   return (
     <>
-      <h2 className="text-center mt-3 mb-0">Pinned Games</h2>
+      <h2 className="text-center mt-3 mb-0">Games</h2>
       <section className="md-container m-auto" id="group-games">
         {games.length !== 0 ? (
           <div className="d-flex p-3 flex-wrap" id="cardContainer">
@@ -93,7 +93,7 @@ function JoinedGames() {
             ))}
           </div>
         ) : (
-          <div className="text-center">You have no games pinned yet!</div>
+          <div className="text-center">You have no games yet!</div>
         )}
       </section>
     </>
