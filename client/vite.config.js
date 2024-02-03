@@ -14,5 +14,6 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+    fallback: "index.html", // Ensure this is set for client-side routing
   },
 });

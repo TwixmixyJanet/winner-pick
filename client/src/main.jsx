@@ -2,7 +2,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
 import Home from "./pages/Home.jsx";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Router } from "react-router-dom";
 
 import Dashboard from "./pages/Dashboard.jsx";
 import AddGame from "./pages/AddGame.jsx";
@@ -25,6 +25,7 @@ const router = createBrowserRouter([
     // error: <NoMatch />,
     children: [
       {
+        path: "*",
         index: true,
         element: <Home />,
       },
@@ -72,6 +73,11 @@ const router = createBrowserRouter([
   },
 ]);
 
+// ReactDOM.createRoot(document.getElementById("root")).render(
+//   <RouterProvider router={router} />
+// );
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
+  <RouterProvider router={router}>
+    <Router>{router}</Router>
+  </RouterProvider>
 );

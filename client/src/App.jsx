@@ -24,7 +24,7 @@ const authLink = setContext((_, { headers }) => {
 
 // Construct our main GraphQL API endpoint
 const httpLink = createHttpLink({
-  uri: "/graphql",
+  uri: "http://localhost:3001/graphql", // Update the URI to match your GraphQL server
 });
 
 const client = new ApolloClient({
