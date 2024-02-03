@@ -1,78 +1,105 @@
-const db = require('../config/connection');
-const { User, Group, Game } = require('../models');
-const cleanDB = require('./cleanDB');
+const db = require("../config/connection");
+const { User, Group, Game } = require("../models");
+const cleanDB = require("./cleanDB");
 
-db.once('open', async () => {
+db.once("open", async () => {
   try {
-    await cleanDB('User', 'users');
-    await cleanDB('Game', 'games');
-    await cleanDB('Group', 'groups');
+    await cleanDB("User", "users");
+    await cleanDB("Game", "games");
+    await cleanDB("Group", "groups");
 
     const groups = await Group.insertMany([
       {
-        name: "Weblins"
+        name: "Weblins",
       },
       {
-        name: "The Tribe Has Spoken"
+        name: "The Tribe Has Spoken",
       },
       {
-        name: "Bitchelorette"
+        name: "Bitchelorette",
       },
       {
-        name: "Traitors"
+        name: "Traitors",
       },
       {
-        name: "Alligabler"
+        name: "Alligabler",
       },
       {
-        name: "ChampagneAllDay"
+        name: "ChampagneAllDay",
       },
       {
-        name: "Jeff4Ever"
-      }
+        name: "Jeff4Ever",
+      },
     ]);
 
-    console.log('👪 groups seeded 👪');
+    console.log("👪 groups seeded 👪");
 
     const games = await Game.insertMany([
       {
         name: "Survivor 46",
-        photo: "https://m.media-amazon.com/images/M/MV5BYjFhYjQzMDUtNGYxZC00YjliLTlmYzAtODE1ZTU1M2ExY2I0XkEyXkFqcGdeQXVyMTE0MzQwMjgz._V1_QL75_UY281_CR31,0,500,281_.jpg",
-        description: "Survivor Season 46 returns to Mamanuca Island, Fiji, with beautiful beaches and clear water.",
-        castMembers: ["Ben Katzman", "Bhanu Gopal", "Charlie Davis", "David Jelinsky", "Hunter McKnight", "Jem Hu Adams", "Jessica Chong", "Kenzie Veurink", "Liz Wilcox", "Maria Shrime Gonzalez", "Moriah Gaynor", "Quintavius Burdette", "Randen Montalvo", "Sodasia Thompson", "Tevin Davis", "Tiffany Nicole Ervin", "Tim Spicer", "Venus Vafa"],
+        photo:
+          "https://m.media-amazon.com/images/M/MV5BYjFhYjQzMDUtNGYxZC00YjliLTlmYzAtODE1ZTU1M2ExY2I0XkEyXkFqcGdeQXVyMTE0MzQwMjgz._V1_QL75_UY281_CR31,0,500,281_.jpg",
+        description:
+          "Survivor Season 46 returns to Mamanuca Island, Fiji, with beautiful beaches and clear water.",
+        castMembers: [
+          "Ben Katzman",
+          "Bhanu Gopal",
+          "Charlie Davis",
+          "David Jelinsky",
+          "Hunter McKnight",
+          "Jem Hu Adams",
+          "Jessica Chong",
+          "Kenzie Veurink",
+          "Liz Wilcox",
+          "Maria Shrime Gonzalez",
+          "Moriah Gaynor",
+          "Quintavius Burdette",
+          "Randen Montalvo",
+          "Sodasia Thompson",
+          "Tevin Davis",
+          "Tiffany Nicole Ervin",
+          "Tim Spicer",
+          "Venus Vafa",
+        ],
         numMembers: 18,
         author: "B-King",
-        groups: [groups[0]._id]
+        groups: [groups[0]._id],
       },
       {
         name: "The Bachelor",
-        photo: "https://m.media-amazon.com/images/M/MV5BZmYwMzUxZjctMjUzZi00YzY2LWJjNzItNzQwYjM4MzU4MzRiXkEyXkFqcGdeQXVyMTE0MzQwMjgz._V1_QL75_UY281_CR31,0,500,281_.jpg",
-        description: "The Bachelor is an American dating and relationship reality television series that debuted on March 25, 2002, on ABC.",
+        photo:
+          "https://parade.com/.image/ar_1.91%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cg_faces:center%2Cq_auto:good%2Cw_1200/MjAzMDQ3ODg4NzI3NTgxODc4/the-bachelor-joey-graziadei.jpg",
+        description:
+          "The Bachelor is an American dating and relationship reality television series that debuted on March 25, 2002, on ABC.",
         castMembers: ["Clayton Echard"],
         numMembers: 1,
         author: "Barbie",
-        groups: [groups[1]._id]
+        groups: [groups[1]._id],
       },
       {
         name: "The Bachelorette",
-        photo: "https://m.media-amazon.com/images/M/MV5BZmYwMzUxZjctMjUzZi00YzY2LWJjNzItNzQwYjM4MzU4MzRiXkEyXkFqcGdeQXVyMTE0MzQwMjgz._V1_QL75_UY281_CR31,0,500,281_.jpg",
-        description: "The Bachelorette is an American reality television dating game show that debuted on ABC on January 8, 2003.",
+        photo:
+          "https://www.etonline.com/sites/default/files/images/2017-04/1280_rachel_lindsay_bachelorette_twitter.jpg",
+        description:
+          "The Bachelorette is an American reality television dating game show that debuted on ABC on January 8, 2003.",
         castMembers: ["Michelle Young"],
         numMembers: 1,
         author: "Superman",
-        groups: [groups[2]._id]
+        groups: [groups[2]._id],
       },
       {
         name: "The Amazing Race",
-        photo: "https://m.media-amazon.com/images/M/MV5BZmYwMzUxZjctMjUzZi00YzY2LWJjNzItNzQwYjM4MzU4MzRiXkEyXkFqcGdeQXVyMTE0MzQwMjgz._V1_QL75_UY281_CR31,0,500,281_.jpg",
-        description: "The Amazing Race is back for its 33rd season! This season, 11 teams will embark on a trek around the world.",
+        photo:
+          "https://wwwimage-tve.cbsstatic.com/base/files/seo/ar_us_s35_social_1200x627_5.jpg",
+        description:
+          "The Amazing Race is back for its 33rd season! This season, 11 teams will embark on a trek around the world.",
         castMembers: ["Phil Keoghan"],
         numMembers: 1,
         author: "KissUncleKay",
-        groups: [groups[3]._id]
-      }
+        groups: [groups[3]._id],
+      },
     ]);
-    console.log('🏆 games seeded 🏆');
+    console.log("🏆 games seeded 🏆");
 
     const users = await User.insertMany([
       {
@@ -148,13 +175,12 @@ db.once('open', async () => {
         games: [games[2]._id],
       },
     ]);
-    console.log('👤 users seeded 👤');
-
+    console.log("👤 users seeded 👤");
   } catch (err) {
     console.error(err);
     process.exit(1);
   }
 
-  console.log('🌱🌱🌱seeding all done!🌱🌱🌱');
+  console.log("🌱🌱🌱seeding all done!🌱🌱🌱");
   process.exit(0);
 });
