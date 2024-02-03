@@ -1,46 +1,46 @@
-const { User, Recipe, Family } = require('../models');
+const { User, Game, Group } = require('../models');
 const { signToken, AuthenticationError } = require('../utils/auth');
 
 
  const resolvers = {
   Query: {
-    recipes: async () => {
-      return await Recipe.find().populate('families');
+    games: async () => {
+      return await Game.find().populate('groups');
     },
-    recipe: async (parent, { _id }) => {
-      return await Recipe.findById(_id).populate('families');
-    },
-
-    families: async () => {
-      return await Family.find();
-    },
-    family: async (parent, { _id }) => {
-      return await Family.findById(_id);
+    game: async (parent, { _id }) => {
+      return await Game.findById(_id).populate('groups');
     },
 
-    famRecipe: async (parent, { familyId }) => {
-      return await Recipe.find({ families: { _id : familyId }}).populate('families');
+    groups: async () => {
+      return await Group.find();
+    },
+    group: async (parent, { _id }) => {
+      return await Group.findById(_id);
+    },
+
+    groupGame: async (parent, { groupId }) => {
+      return await Game.find({ groups: { _id : groupId }}).populate('groups');
     },
 
     user: async (parent, { username }) => {
-      return await User.findOne( { username: username } ).populate(['families', 'recipes']);
+      return await User.findOne( { username: username } ).populate(['groups', 'games']);
     },
 
-    familyMembers: async (parent, { familyId }) => {
-      return await User.find({ families: { _id : familyId }}).populate('families');
+    groupMembers: async (parent, { groupId }) => {
+      return await User.find({ groups: { _id : groupId }}).populate('groups');
     },
 
-    familyRecipePhotos: async( parent, { username }) => {
-      const user = await User.findOne( { username: username } ).populate(['families', 'recipes']);
-      let familyrecipe = [];
-      for(i = 0; i < user.families.length; i++) {
-        familyrecipe.push({ familyId: user.families[i]._id , name: user.families[i].name, photos: []})
-        const familyrecipedata = await Recipe.find({ families: { _id : user.families[i]._id }});
-        for (j = 0; j < familyrecipedata.length; j++){
-          familyrecipe[i].photos.push(familyrecipedata[j].photo);
+    groupGamePhotos: async( parent, { username }) => {
+      const user = await User.findOne( { username: username } ).populate(['groups', 'games']);
+      let groupgame = [];
+      for(i = 0; i < user.groups.length; i++) {
+        groupgame.push({ groupId: user.groups[i]._id , name: user.groups[i].name, photos: []})
+        const groupgamedata = await Game.find({ groups: { _id : user.groups[i]._id }});
+        for (j = 0; j < groupgamedata.length; j++){
+          groupgame[i].photos.push(groupgamedata[j].photo);
         }
       }
-      return familyrecipe;
+      return groupgame;
     }
 
 
@@ -73,23 +73,23 @@ const { signToken, AuthenticationError } = require('../utils/auth');
       return { token, user };
     },
 
-    addFamily: async (parent, { name }, context) => {
-      const newFamily = await Family.create({ name : name });
+    addGroup: async (parent, { name }, context) => {
+      const newGroup = await Group.create({ name : name });
       const updatedUser = await User.findByIdAndUpdate(
         { _id: context.user._id },
-        { $addToSet: { families: newFamily._id } },
+        { $addToSet: { groups: newGroup._id } },
         { new: true }
-      ).populate('families');
-      return newFamily;
+      ).populate('groups');
+      return newGroup;
     },
 
-    joinFamily: async (parent, { familyId }, context) => {
+    joinGroup: async (parent, { groupId }, context) => {
       if (context.user) {
         const updatedUser = await User.findByIdAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { families: familyId } },
+          { $addToSet: { groups: groupId } },
           { new: true }
-        ).populate('families');
+        ).populate('groups');
 
         return updatedUser;
       }
@@ -97,13 +97,13 @@ const { signToken, AuthenticationError } = require('../utils/auth');
       throw new AuthenticationError('You need to be logged in!');
     },
 
-    leaveFamily: async (parent, { familyId }, context) => {
+    leaveGroup: async (parent, { groupId }, context) => {
       if (context.user) {
         const updatedUser = await User.findByIdAndUpdate(
           { _id: context.user._id },
-          { $pull: { families: familyId } },
+          { $pull: { groups: groupId } },
           { new: true }
-        ).populate('families');
+        ).populate('groups');
 
         return updatedUser;
       }
@@ -111,50 +111,50 @@ const { signToken, AuthenticationError } = require('../utils/auth');
       throw new AuthenticationError('You need to be logged in!');
     },
 
-    addRecipe: async (parent, args, context) => {
-      const newRecipe = await Recipe.create(args);
-      const addRecipeToUser = await User.findByIdAndUpdate(
+    addGame: async (parent, args, context) => {
+      const newGame = await Game.create(args);
+      const addGameToUser = await User.findByIdAndUpdate(
         { _id: context.user._id },
-        { $addToSet: { recipes: newRecipe._id }  },
+        { $addToSet: { games: newGame._id }  },
         { new: true }
       );
-      if (args.familyId) {
-        const addRecipeToFamily = await Recipe.findByIdAndUpdate(
-          { _id: newRecipe._id },
-          { $set: {families: { _id: args.familyId }} },
+      if (args.groupId) {
+        const addGameToGroup = await Game.findByIdAndUpdate(
+          { _id: newGame._id },
+          { $set: {groups: { _id: args.groupId }} },
           {new: true})
-        return addRecipeToFamily;
+        return addGameToGroup;
       };
-      return newRecipe;
+      return newGame;
     },
 
-    updateRecipe: async (parent, { _id, name, photo, cookingTime, instructions, ingredients, servingSize, author, familyId }) => {
-      const updateRecipe = await Recipe.findByIdAndUpdate(
+    updateGame: async (parent, { _id, name, photo, description, castMembers, numMembers, author, groupId }) => {
+      const updateGame = await Game.findByIdAndUpdate(
         { _id: _id },
-        { name: name, photo: photo, cookingTime: cookingTime, instructions: instructions, ingredients: ingredients, servingSize: servingSize, author: author, families: familyId},
+        { name: name, photo: photo, description: description, castMembers: castMembers, numMembers: numMembers, author: author, groups: groupId},
         { new: true }
-      ).populate('families');
-      console.log(updateRecipe);
-      return updateRecipe;
+      ).populate('groups');
+      console.log(updateGame);
+      return updateGame;
     },
 
-    deleteRecipe: async (parent, { _id }, context) => {
-      const recipe = await Recipe.findByIdAndDelete(_id).populate('families');
-      const deleteRecipeFromUser = await User.findByIdAndUpdate(
+    deleteGame: async (parent, { _id }, context) => {
+      const game = await Game.findByIdAndDelete(_id).populate('groups');
+      const deleteGameFromUser = await User.findByIdAndUpdate(
         { _id: context.user._id },
-        { $pull: { recipes:_id }  },
+        { $pull: { games:_id }  },
         { new: true }
       );
-      return recipe;
+      return game;
     },
 
-    pinRecipe: async (parent, { _id }, context) => {
+    joinGame: async (parent, { _id }, context) => {
       if (context.user) {
         const updatedUser = await User.findByIdAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { pinnedRecipes: _id } },
+          { $addToSet: { joinedGames: _id } },
           { new: true }
-        ).populate('pinnedRecipes');
+        ).populate('joinedGames');
 
         return updatedUser;
       }
@@ -162,13 +162,13 @@ const { signToken, AuthenticationError } = require('../utils/auth');
       throw new AuthenticationError('You need to be logged in!');
     },
 
-    unpinRecipe: async (parent, { _id }, context) => {
+    leaveGame: async (parent, { _id }, context) => {
       if (context.user) {
         const updatedUser = await User.findByIdAndUpdate(
           { _id: context.user._id },
-          { $pull: { pinnedRecipes: _id } },
+          { $pull: { joinedGames: _id } },
           { new: true }
-        ).populate('pinnedRecipes');
+        ).populate('joinedGames');
 
         return updatedUser;
       }
