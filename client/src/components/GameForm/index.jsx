@@ -155,14 +155,14 @@ export default function GameForm() {
           <div data-mdb-input-init className="form-outline mb-3">
             <input
               type="number"
-              id="cookingTime"
+              id="description"
               placeholder="0"
               className="form-control"
-              value={formData.cookingTime}
+              value={formData.description}
               onChange={handleInputChange}
             />
-            <label className="form-label" htmlFor="cookingTime">
-              Cooking Time (In Minutes)
+            <label className="form-label" htmlFor="description">
+              Game Description
             </label>
           </div>
         </div>
@@ -171,14 +171,14 @@ export default function GameForm() {
           <div data-mdb-input-init className="form-outline mb-3">
             <input
               type="number"
-              id="servingSize"
+              id="numMembers"
               className="form-control"
               placeholder="0"
-              value={formData.servingSize}
+              value={formData.numMembers}
               onChange={handleInputChange}
             />
-            <label className="form-label" htmlFor="servingSize">
-              Serving Size (Number of People)
+            <label className="form-label" htmlFor="numMembers">
+              How many cast members are on this show?
             </label>
           </div>
         </div>
@@ -186,26 +186,13 @@ export default function GameForm() {
         <div data-mdb-input-init className="form-outline mb-3">
           <textarea
             className="form-control"
-            id="instructions"
+            id="castMembers"
             rows="4"
-            value={formData.instructions}
+            value={formData.castMembers}
             onChange={handleInputChange}
           ></textarea>
-          <label className="form-label" htmlFor="instructions">
-            Cooking Instructions (Separate each step with a new line)
-          </label>
-        </div>
-
-        <div data-mdb-input-init className="form-outline mb-3">
-          <textarea
-            className="form-control"
-            id="ingredients"
-            rows="4"
-            value={formData.ingredients}
-            onChange={handleInputChange}
-          ></textarea>
-          <label className="form-label" htmlFor="ingredients">
-            Ingredients (Separate each ingredient with a new line)
+          <label className="form-label" htmlFor="castMembers">
+            Cast Members (Separated by commas)
           </label>
         </div>
 
