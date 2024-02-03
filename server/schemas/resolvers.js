@@ -1,14 +1,13 @@
-const { User, Game, Group } = require('../models');
-const { signToken, AuthenticationError } = require('../utils/auth');
+const { User, Game, Group } = require("../models");
+const { signToken, AuthenticationError } = require("../utils/auth");
 
-
- const resolvers = {
+const resolvers = {
   Query: {
     games: async () => {
-      return await Game.find().populate('groups');
+      return await Game.find().populate("groups");
     },
     game: async (parent, { _id }) => {
-      return await Game.findById(_id).populate('groups');
+      return await Game.findById(_id).populate("groups");
     },
 
     groups: async () => {
@@ -19,33 +18,42 @@ const { signToken, AuthenticationError } = require('../utils/auth');
     },
 
     groupGame: async (parent, { groupId }) => {
-      return await Game.find({ groups: { _id : groupId }}).populate('groups');
+      return await Game.find({ groups: { _id: groupId } }).populate("groups");
     },
 
     user: async (parent, { username }) => {
-      return await User.findOne( { username: username } ).populate(['groups', 'games']);
+      return await User.findOne({ username: username }).populate([
+        "groups",
+        "games",
+      ]);
     },
 
     groupMembers: async (parent, { groupId }) => {
-      return await User.find({ groups: { _id : groupId }}).populate('groups');
+      return await User.find({ groups: { _id: groupId } }).populate("groups");
     },
 
-    groupGamePhotos: async( parent, { username }) => {
-      const user = await User.findOne( { username: username } ).populate(['groups', 'games']);
+    groupGamePhotos: async (parent, { username }) => {
+      const user = await User.findOne({ username: username }).populate([
+        "groups",
+        "games",
+      ]);
       let groupgame = [];
-      for(i = 0; i < user.groups.length; i++) {
-        groupgame.push({ groupId: user.groups[i]._id , name: user.groups[i].name, photos: []})
-        const groupgamedata = await Game.find({ groups: { _id : user.groups[i]._id }});
-        for (j = 0; j < groupgamedata.length; j++){
+      for (i = 0; i < user.groups.length; i++) {
+        groupgame.push({
+          groupId: user.groups[i]._id,
+          name: user.groups[i].name,
+          photos: [],
+        });
+        const groupgamedata = await Game.find({
+          groups: { _id: user.groups[i]._id },
+        });
+        for (j = 0; j < groupgamedata.length; j++) {
           groupgame[i].photos.push(groupgamedata[j].photo);
         }
       }
       return groupgame;
-    }
-
-
+    },
   },
-
 
   Mutation: {
     addUser: async (parent, args) => {
@@ -74,12 +82,12 @@ const { signToken, AuthenticationError } = require('../utils/auth');
     },
 
     addGroup: async (parent, { name }, context) => {
-      const newGroup = await Group.create({ name : name });
+      const newGroup = await Group.create({ name: name });
       const updatedUser = await User.findByIdAndUpdate(
         { _id: context.user._id },
         { $addToSet: { groups: newGroup._id } },
         { new: true }
-      ).populate('groups');
+      ).populate("groups");
       return newGroup;
     },
 
@@ -89,12 +97,12 @@ const { signToken, AuthenticationError } = require('../utils/auth');
           { _id: context.user._id },
           { $addToSet: { groups: groupId } },
           { new: true }
-        ).populate('groups');
+        ).populate("groups");
 
         return updatedUser;
       }
 
-      throw new AuthenticationError('You need to be logged in!');
+      throw new AuthenticationError("You need to be logged in!");
     },
 
     leaveGroup: async (parent, { groupId }, context) => {
@@ -103,46 +111,67 @@ const { signToken, AuthenticationError } = require('../utils/auth');
           { _id: context.user._id },
           { $pull: { groups: groupId } },
           { new: true }
-        ).populate('groups');
+        ).populate("groups");
 
         return updatedUser;
       }
 
-      throw new AuthenticationError('You need to be logged in!');
+      throw new AuthenticationError("You need to be logged in!");
     },
 
     addGame: async (parent, args, context) => {
       const newGame = await Game.create(args);
       const addGameToUser = await User.findByIdAndUpdate(
         { _id: context.user._id },
-        { $addToSet: { games: newGame._id }  },
+        { $addToSet: { games: newGame._id } },
         { new: true }
       );
       if (args.groupId) {
         const addGameToGroup = await Game.findByIdAndUpdate(
           { _id: newGame._id },
-          { $set: {groups: { _id: args.groupId }} },
-          {new: true})
+          { $set: { groups: { _id: args.groupId } } },
+          { new: true }
+        );
         return addGameToGroup;
-      };
+      }
       return newGame;
     },
 
-    updateGame: async (parent, { _id, name, photo, description, castMembers, numMembers, author, groupId }) => {
+    updateGame: async (
+      parent,
+      {
+        _id,
+        name,
+        photo,
+        description,
+        castMembers,
+        numMembers,
+        author,
+        groupId,
+      }
+    ) => {
       const updateGame = await Game.findByIdAndUpdate(
         { _id: _id },
-        { name: name, photo: photo, description: description, castMembers: castMembers, numMembers: numMembers, author: author, groups: groupId},
+        {
+          name: name,
+          photo: photo,
+          description: description,
+          castMembers: castMembers,
+          numMembers: numMembers,
+          author: author,
+          groups: groupId,
+        },
         { new: true }
-      ).populate('groups');
+      ).populate("groups");
       console.log(updateGame);
       return updateGame;
     },
 
     deleteGame: async (parent, { _id }, context) => {
-      const game = await Game.findByIdAndDelete(_id).populate('groups');
+      const game = await Game.findByIdAndDelete(_id).populate("groups");
       const deleteGameFromUser = await User.findByIdAndUpdate(
         { _id: context.user._id },
-        { $pull: { games:_id }  },
+        { $pull: { games: _id } },
         { new: true }
       );
       return game;
@@ -154,12 +183,12 @@ const { signToken, AuthenticationError } = require('../utils/auth');
           { _id: context.user._id },
           { $addToSet: { joinedGames: _id } },
           { new: true }
-        ).populate('joinedGames');
+        ).populate("joinedGames");
 
         return updatedUser;
       }
 
-      throw new AuthenticationError('You need to be logged in!');
+      throw new AuthenticationError("You need to be logged in!");
     },
 
     leaveGame: async (parent, { _id }, context) => {
@@ -168,13 +197,13 @@ const { signToken, AuthenticationError } = require('../utils/auth');
           { _id: context.user._id },
           { $pull: { joinedGames: _id } },
           { new: true }
-        ).populate('joinedGames');
+        ).populate("joinedGames");
 
         return updatedUser;
       }
 
-      throw new AuthenticationError('You need to be logged in!');
-    }
+      throw new AuthenticationError("You need to be logged in!");
+    },
   },
 };
 
