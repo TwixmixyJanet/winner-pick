@@ -3,14 +3,14 @@ import { initMDB, Ripple } from "mdb-ui-kit";
 import { useQuery, useMutation } from "@apollo/client";
 import { QUERY_USER } from "../utils/queries";
 import { Link, useNavigate } from "react-router-dom";
-import { DELETE_RECIPE } from "../utils/mutations";
-import './style.css';
+import { DELETE_GAME } from "../utils/mutations";
+import "./style.css";
 
 import Auth from "../utils/auth";
 
 initMDB({ Ripple });
 
-import FamilyCards from "../components/FamilyCards";
+import GroupCards from "../components/GroupCards";
 
 function Dashboard() {
   const username = Auth.getProfile().authenticatedPerson.username;
@@ -19,41 +19,38 @@ function Dashboard() {
     variables: { username: username },
   });
 
-  const [deleteRecipe] = useMutation(DELETE_RECIPE, {
+  const [deleteGame] = useMutation(DELETE_GAME, {
     refetchQueries: [{ query: QUERY_USER, variables: { username: username } }],
   });
 
   const navigate = useNavigate();
 
-  const handleEditRecipe = async (recipeId) => {
-    navigate(`/editrecipe/${recipeId}`);
+  const handleEditGame = async (gameId) => {
+    navigate(`/editgame/${gameId}`);
   };
 
-  const [recipes, setRecipes] = useState([]);
+  const [games, setGames] = useState([]);
 
-  const handleDeleteRecipe = async (recipeId) => {
+  const handleDeleteGame = async (gameId) => {
     try {
-      // Send a mutation to delete the recipe
-      await deleteRecipe({
-        variables: { id: recipeId },
+      // Send a mutation to delete the game
+      await deleteGame({
+        variables: { id: gameId },
       });
 
-      // Update the state to remove the deleted recipe
-      setRecipes((prevRecipes) =>
-        prevRecipes.filter((recipe) => recipe._id !== recipeId)
-      );
+      // Update the state to remove the deleted game
+      setGames((prevGames) => prevGames.filter((game) => game._id !== gameId));
       location.reload();
-      console.log("Recipe deleted successfully!");
+      console.log("Game deleted successfully!");
     } catch (error) {
-      console.error("Error deleting recipe:", error);
+      console.error("Error deleting game:", error);
       // Handle error as needed
     }
   };
 
-
   useEffect(() => {
-    if (data && data.user && data.user.recipes) {
-      setRecipes(data.user.recipes);
+    if (data && data.user && data.user.games) {
+      setGames(data.user.games);
     }
   }, [data]);
 
@@ -66,41 +63,37 @@ function Dashboard() {
 
   return (
     <>
-      {/* Family */}
-      <section className="md-container m-auto" id="dashboard-families">
+      {/* Group */}
+      <section className="md-container m-auto" id="dashboard-groups">
         <div className="d-flex p-3 flex-wrap" id="cardContainer">
-          <FamilyCards />
+          <GroupCards />
         </div>
       </section>
 
-      {/* Added Recipe */}
+      {/* Added Game */}
       <div className="d-flex p-3 flex-wrap" id="cardContainer">
-      <section className="container m-auto justify-content-between d-flex flex-wrap pb-4">
-        <h2>Your Recipes</h2>
-        <div>
-          <Link
-            to={`/addrecipe/`}
-            className="btn"
-            data-mdb-ripple-init
-          >
-            Add New Recipe
-          </Link>
-        </div>
-      </section>
-      <>
-          {recipes.length !== 0 ? (
+        <section className="container m-auto justify-content-between d-flex flex-wrap pb-4">
+          <h2>Your Games</h2>
+          <div>
+            <Link to={`/addgame/`} className="btn" data-mdb-ripple-init>
+              Add New Game
+            </Link>
+          </div>
+        </section>
+        <>
+          {games.length !== 0 ? (
             <>
-              {recipes.map((recipe) => (
-                <div className="card mb-4" key={recipe._id}>
+              {games.map((game) => (
+                <div className="card mb-4" key={game._id}>
                   <div
                     className="bg-image hover-overlay"
                     data-mdb-ripple-init
                     data-mdb-ripple-color="light"
                   >
                     <img
-                      src={recipe?.photo || ""}
+                      src={game?.photo || ""}
                       className="img-fluid mb-0"
-                      alt={recipe?.name || ""}
+                      alt={game?.name || ""}
                     />
                     <a href="#!">
                       <div
@@ -111,18 +104,18 @@ function Dashboard() {
                   </div>
                   <div className="card-body pt-1 pb-3">
                     <h5 className="card-title mb-2">
-                      {recipe?.name || "No Title"}
+                      {game?.name || "No Title"}
                     </h5>
                     <Link
-                      to={`/recipe/${recipe?._id}`}
+                      to={`/game/${game?._id}`}
                       className="btn"
                       data-mdb-ripple-init
                     >
-                      See Recipe
+                      See Game
                     </Link>
                     <button
                       className="btn"
-                      onClick={() => handleEditRecipe(recipe._id)}
+                      onClick={() => handleEditGame(game._id)}
                       data-mdb-ripple-init
                     >
                       Edit
@@ -130,16 +123,16 @@ function Dashboard() {
                     <button
                       className="btn"
                       data-mdb-ripple-init
-                      onClick={() => handleDeleteRecipe(recipe._id)}
+                      onClick={() => handleDeleteGame(game._id)}
                     >
-                      Delete Recipe
+                      Delete Game
                     </button>
                   </div>
                 </div>
               ))}
             </>
           ) : (
-            <p>You have not added any recipes yet</p>
+            <p>You have not added any games yet</p>
           )}
         </>
       </div>
