@@ -59,9 +59,7 @@ function GroupGames() {
 
   return (
     <>
-      <h2 className="text-center mt-3 mb-0">
-        Games of group {groupdata?.name || ""}
-      </h2>
+      <h2 className="text-center mt-3 mb-0">{groupdata?.name || ""} Games</h2>
       <p className="text-center">
         <small>
           (<b>Group ID:</b> {groupdata?._id || ""})

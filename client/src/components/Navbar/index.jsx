@@ -63,6 +63,10 @@ const NavBar = () => {
             {/* Other navigation links */}
             <li className="nav-item">
               <Link className="nav-link" to="/">
+                <i
+                  className="fa-solid fa-house fa p-auto"
+                  style={{ color: "#da6d44" }}
+                ></i>{" "}
                 Home
               </Link>
             </li>
@@ -70,12 +74,20 @@ const NavBar = () => {
               <>
                 <li className="nav-item">
                   <Link className="nav-link" to="/dashboard">
+                    <i
+                      className="fa-solid fa-gauge fa p-auto"
+                      style={{ color: "#da6d44" }}
+                    ></i>{" "}
                     Dashboard
                   </Link>
                 </li>
 
                 <li className="nav-item">
                   <Link className="nav-link" to="/joinedgames">
+                    <i
+                      className="fa-solid fa-thumbtack fa p-auto"
+                      style={{ color: "#da6d44" }}
+                    ></i>{" "}
                     Games
                   </Link>
                 </li>

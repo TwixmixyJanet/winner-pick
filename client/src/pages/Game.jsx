@@ -139,7 +139,7 @@ function Game() {
                               >
                                 <i
                                   className="fa-solid fa-thumbtack fa-2x p-auto"
-                                  style={{ color: "#F139AA" }}
+                                  style={{ color: "#da6d44" }}
                                 ></i>
                               </div>
                             ) : (
@@ -149,7 +149,7 @@ function Game() {
                               >
                                 <i
                                   className="fa-solid fa-thumbtack fa-2x p-auto"
-                                  style={{ color: "#b598a3" }}
+                                  style={{ color: "#e4b54b" }}
                                 ></i>
                               </div>
                             )}
