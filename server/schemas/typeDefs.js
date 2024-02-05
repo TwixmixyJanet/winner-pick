@@ -44,9 +44,9 @@ const typeDefs = `
     game(_id: ID!): Game
     groups: [Group]
     group(_id: ID!): Group
-    groupGame( familyId : ID!): [Game]
+    groupGame( groupId : ID!): [Game]
     user(username: String!): User
-    groupMembers( familyId : ID!): [User]
+    groupMembers( groupId : ID!): [User]
     groupGamePhotos(username: String!): [Photos]
   }
 
