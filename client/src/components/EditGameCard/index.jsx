@@ -68,7 +68,7 @@ export default function GameForm() {
           name: name,
           description: description,
           castMembers: castMembers,
-          numMembers: numMembers,
+          numMembers: parent(numMembers),
           groupId: groupId,
           photo: myImage,
           author: username,
@@ -171,48 +171,45 @@ export default function GameForm() {
           </div>
         </div>
 
-        <div className="col-5 p-0">
-          <div data-mdb-input-init className="form-outline mb-3">
-            <input
-              type="number"
-              id="description"
-              placeholder="0"
-              className="form-control"
-              value={formData.description}
-              onChange={handleInputChange}
-            />
-            <label className="form-label" htmlFor="description">
-              Whats this show about?
-            </label>
-          </div>
+        <div data-mdb-input-init className="form-outline mb-3">
+          <input
+            type="text"
+            id="description"
+            className="form-control"
+            value={formData.description}
+            onChange={handleInputChange}
+          />
+          <label className="form-label" htmlFor="description">
+            Game Description
+          </label>
         </div>
 
         <div className="col-5 p-0">
           <div data-mdb-input-init className="form-outline mb-3">
-            <input
+            <textarea
               type="number"
-              id="castMembers"
               className="form-control"
-              placeholder="0"
-              value={formData.castMembers}
+              id="numMembers"
+              value={formData.numMembers}
               onChange={handleInputChange}
-            />
-            <label className="form-label" htmlFor="castMembers">
-              Name of cast members
+            ></textarea>
+            <label className="form-label" htmlFor="numMembers">
+              How many cast members are on this show?
             </label>
           </div>
         </div>
 
         <div data-mdb-input-init className="form-outline mb-3">
-          <textarea
-            className="form-control"
-            id="numMembers"
+          <input
+            type="text"
+            id="castMembers"
             rows="4"
-            value={formData.numMembers}
+            className="form-control"
+            value={formData.castMembers}
             onChange={handleInputChange}
-          ></textarea>
-          <label className="form-label" htmlFor="numMembers">
-            Insert # variable
+          />
+          <label className="form-label" htmlFor="castMembers">
+            Cast Members (Separated by commas)
           </label>
         </div>
 

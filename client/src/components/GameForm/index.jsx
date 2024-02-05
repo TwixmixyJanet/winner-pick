@@ -54,21 +54,23 @@ export default function GameForm() {
       console.log("formData: ", formData);
       console.log("myImage: ", myImage);
       console.log("username: ", username);
+
       const { name, description, castMembers, numMembers, groupId } = formData;
+
       const { data, error } = await addGame({
         variables: {
-          name: name,
-          description: description,
-          castMembers: castMembers,
-          numMembers: numMembers,
-          groupId: groupId,
+          name,
+          description,
+          castMembers,
+          numMembers: parseInt(numMembers),
+          groupId,
           photo: myImage,
           author: username,
         },
         refetchQueries: [{ query: QUERY_USER, variables: { username } }],
       });
 
-      //Reset the form after successful submission
+      // Reset the form after successful submission
       setFormData({
         name: "",
         description: "",
@@ -84,12 +86,54 @@ export default function GameForm() {
       }
 
       if (error) {
-        setuploadError("something went wrong, please try again");
+        setuploadError("Something went wrong, please try again");
       }
     } catch (error) {
       console.error("Error submitting game:", error);
+      // Handle additional error logic if needed
     }
   };
+  // const handleSubmit = async () => {
+  //   try {
+  //     console.log("formData: ", formData);
+  //     console.log("myImage: ", myImage);
+  //     console.log("username: ", username);
+  //     const { name, description, castMembers, numMembers, groupId } = formData;
+  //     const { data, error } = await addGame({
+  //       variables: {
+  //         name: name,
+  //         description: description,
+  //         castMembers: castMembers,
+  //         numMembers: numMembers,
+  //         groupId: groupId,
+  //         photo: myImage,
+  //         author: username,
+  //       },
+  //       refetchQueries: [{ query: QUERY_USER, variables: { username } }],
+  //     });
+
+  //     //Reset the form after successful submission
+  //     setFormData({
+  //       name: "",
+  //       description: "",
+  //       castMembers: "",
+  //       numMembers: "",
+  //       groupId: "",
+  //     });
+
+  //     setMyImage("");
+
+  //     if (data) {
+  //       window.location.replace(window.location.origin + "/dashboard");
+  //     }
+
+  //     if (error) {
+  //       setuploadError("something went wrong, please try again");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error submitting game:", error);
+  //   }
+  // };
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -155,7 +199,7 @@ export default function GameForm() {
           <input
             type="text"
             id="description"
-            placeholder="0"
+            placeholder="Description of the game..."
             className="form-control"
             value={formData.description}
             onChange={handleInputChange}
@@ -171,7 +215,7 @@ export default function GameForm() {
               type="number"
               id="numMembers"
               className="form-control"
-              placeholder="0"
+              placeholder="Number of cast members"
               value={formData.numMembers}
               onChange={handleInputChange}
             />
@@ -210,7 +254,7 @@ export default function GameForm() {
               </option>
             ) : (
               <>
-                <option defaultValue="" selected className="optColor">
+                <option defaultValue="" className="optColor">
                   Choose a group (Select a group to share this game)
                 </option>
                 {userGroups.map((group) => (
