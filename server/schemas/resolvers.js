@@ -210,16 +210,6 @@ const resolvers = {
 
       throw new AuthenticationError("You need to be logged in!");
     },
-
-    addCastMember: async (parent, { name }, context) => {
-      const newCastMember = await CastMember.create({ name });
-      return newCastMember;
-    },
-
-    addEpisode: async (parent, args, context) => {
-      const newEpisode = await Episode.create(args);
-      return newEpisode;
-    },
     addCastMember: async (parent, { name }) => {
       const newCastMember = await CastMember.create({ name });
       return newCastMember;
