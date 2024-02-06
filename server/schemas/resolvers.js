@@ -1,4 +1,4 @@
-const { User, Game, Group } = require("../models");
+const { User, Game, Group, CastMember, Episode } = require("../models");
 const { signToken, AuthenticationError } = require("../utils/auth");
 
 const resolvers = {
@@ -52,6 +52,12 @@ const resolvers = {
         }
       }
       return groupgame;
+    },
+    castMembers: async () => {
+      return await CastMember.find();
+    },
+    episodes: async () => {
+      return await Episode.find();
     },
   },
 
@@ -203,6 +209,52 @@ const resolvers = {
       }
 
       throw new AuthenticationError("You need to be logged in!");
+    },
+
+    addCastMember: async (parent, { name }, context) => {
+      const newCastMember = await CastMember.create({ name });
+      return newCastMember;
+    },
+
+    addEpisode: async (parent, args, context) => {
+      const newEpisode = await Episode.create(args);
+      return newEpisode;
+    },
+    addCastMember: async (parent, { name }) => {
+      const newCastMember = await CastMember.create({ name });
+      return newCastMember;
+    },
+    updateCastMember: async (parent, { _id, name }) => {
+      const updatedCastMember = await CastMember.findByIdAndUpdate(
+        { _id },
+        { name },
+        { new: true }
+      );
+      return updatedCastMember;
+    },
+
+    deleteCastMember: async (parent, { _id }) => {
+      const deletedCastMember = await CastMember.findByIdAndDelete(_id);
+      return deletedCastMember;
+    },
+
+    addEpisode: async (parent, { name }) => {
+      const newEpisode = await Episode.create({ name });
+      return newEpisode;
+    },
+
+    updateEpisode: async (parent, { _id, name }) => {
+      const updatedEpisode = await Episode.findByIdAndUpdate(
+        { _id },
+        { name },
+        { new: true }
+      );
+      return updatedEpisode;
+    },
+
+    deleteEpisode: async (parent, { _id }) => {
+      const deletedEpisode = await Episode.findByIdAndDelete(_id);
+      return deletedEpisode;
     },
   },
 };

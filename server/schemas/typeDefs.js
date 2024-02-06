@@ -5,11 +5,11 @@ const typeDefs = `
   }
 
   type Game {
-    _id: ID
+    _id: ID!
     name: String!
     photo: String!
     description: String!
-    castMembers: [String!]
+    castMembers: [CastMember]
     numMembers: Int!
     author: String!
     createdAt: String!
@@ -17,7 +17,7 @@ const typeDefs = `
   }
 
   type User {
-    _id: ID
+    _id: ID!
     firstName: String!
     lastName: String!
     username: String!
@@ -26,6 +26,23 @@ const typeDefs = `
     groups: [Group]
     games: [Game]
     joinedGames: [Game]
+  }
+
+  type CastMember {
+    _id: ID
+    name: String!
+    groups: [Group]
+    users: [User]
+    games: [Game]
+    episodes: [Episode]
+  }
+  
+  type Episode {
+    _id: ID
+    name: String!
+    games: [Game]
+    castMembers: [CastMember]
+    eliminated: [CastMember]
   }
 
   type Auth {
@@ -44,10 +61,12 @@ const typeDefs = `
     game(_id: ID!): Game
     groups: [Group]
     group(_id: ID!): Group
-    groupGame( groupId : ID!): [Game]
+    groupGame(groupId: ID!): [Game]
     user(username: String!): User
-    groupMembers( groupId : ID!): [User]
+    groupMembers(groupId: ID!): [User]
     groupGamePhotos(username: String!): [Photos]
+    castMembers: [CastMember]
+    episodes: [Episode]
   }
 
   type Mutation {
@@ -56,11 +75,17 @@ const typeDefs = `
     addGroup(name: String!): Group
     joinGroup(groupId: ID!): User
     leaveGroup(groupId: ID!): User
-    addGame(name: String!, photo: String!, description: String!, castMembers: [String!], numMembers: Int!, author: String!, groupId: ID): Game
-    updateGame(_id: ID!, name: String, photo: String, description: String!, castMembers: [String], numMembers: Int, author: String, groupId: ID): Game
+    addGame(name: String!, photo: String!, description: String!, castMembers: [ID!]!, numMembers: Int!, author: String!, groupId: ID): Game
+    updateGame(_id: ID!, name: String, photo: String, description: String, castMembers: [ID], numMembers: Int, author: String, groupId: ID): Game
     deleteGame(_id: ID!): Game
     joinGame(_id: ID!): User
     leaveGame(_id: ID!): User
+    addCastMember(name: String!): CastMember
+    updateCastMember(_id: ID!, name: String): CastMember
+    deleteCastMember(_id: ID!): CastMember
+    addEpisode(name: String!): Episode
+    updateEpisode(_id: ID!, name: String): Episode
+    deleteEpisode(_id: ID!): Episode
   }
 `;
 
