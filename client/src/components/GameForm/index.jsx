@@ -22,7 +22,7 @@ export default function GameForm() {
     widgetRef.current = cloudinaryRef.current.createUploadWidget(
       {
         cloudName: "defuryakl",
-        uploadPreset: "reciperolodex",
+        uploadPreset: "winnerpick",
       },
       function (error, result) {
         if (result && result.info && result.info.secure_url) {
