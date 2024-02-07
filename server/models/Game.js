@@ -26,10 +26,6 @@ const gameSchema = new Schema({
     type: Number,
     required: true,
   },
-  author: {
-    type: String,
-    required: true,
-  },
   createdAt: {
     type: Date,
     default: Date.now,

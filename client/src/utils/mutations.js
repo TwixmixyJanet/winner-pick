@@ -91,7 +91,6 @@ export const ADD_GAME = gql`
     $description: String!
     $castMembers: [String!]
     $numMembers: Int!
-    $author: String!
     $groupId: ID
   ) {
     addGame(
@@ -100,7 +99,6 @@ export const ADD_GAME = gql`
       description: $description
       castMembers: $castMembers
       numMembers: $numMembers
-      author: $author
       groupId: $groupId
     ) {
       _id
@@ -109,7 +107,6 @@ export const ADD_GAME = gql`
       description
       castMembers
       numMembers
-      author
       createdAt
       groups {
         _id
@@ -126,7 +123,6 @@ export const UPDATE_GAME = gql`
     $description: String!
     $castMembers: [String!]
     $numMembers: Int!
-    $author: String!
     $groupId: ID
   ) {
     updateGame(
@@ -136,7 +132,6 @@ export const UPDATE_GAME = gql`
       description: $description
       castMembers: $castMembers
       numMembers: $numMembers
-      author: $author
       groupId: $groupId
     ) {
       _id
@@ -145,7 +140,6 @@ export const UPDATE_GAME = gql`
       description
       castMembers
       numMembers
-      author
       createdAt
       groups {
         _id
@@ -164,7 +158,6 @@ export const DELETE_GAME = gql`
       description
       castMembers
       numMembers
-      author
       createdAt
       groups {
         _id

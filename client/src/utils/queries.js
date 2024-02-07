@@ -25,7 +25,6 @@ export const QUERY_USER = gql`
           name
         }
         numMembers
-        author
         createdAt
       }
       joinedGames {
@@ -47,7 +46,6 @@ export const QUERY_ALL_GAMES = gql`
         name
       }
       numMembers
-      author
       createdAt
       groups {
         _id
@@ -69,7 +67,6 @@ export const QUERY_GAME = gql`
         name
       }
       numMembers
-      author
       createdAt
       groups {
         _id
@@ -106,7 +103,6 @@ export const QUERY_GROUP_GAME = gql`
       description
       castMembers
       numMembers
-      author
       createdAt
       groups {
         _id

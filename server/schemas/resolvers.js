@@ -145,16 +145,7 @@ const resolvers = {
 
     updateGame: async (
       parent,
-      {
-        _id,
-        name,
-        photo,
-        description,
-        castMembers,
-        numMembers,
-        author,
-        groupId,
-      }
+      { _id, name, photo, description, castMembers, numMembers, groupId }
     ) => {
       const updateGame = await Game.findByIdAndUpdate(
         { _id: _id },
@@ -164,7 +155,6 @@ const resolvers = {
           description: description,
           castMembers: castMembers,
           numMembers: numMembers,
-          author: author,
           groups: groupId,
         },
         { new: true }
