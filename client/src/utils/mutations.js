@@ -197,3 +197,55 @@ export const LEAVE_GAME = gql`
     }
   }
 `;
+
+export const ADD_CAST_MEMBER = gql`
+  mutation addCastMember($name: String!) {
+    addCastMember(name: $name) {
+      _id
+      name
+    }
+  }
+`;
+
+export const UPDATE_CAST_MEMBER = gql`
+  mutation updateCastMember($id: ID!, $name: String!) {
+    updateCastMember(_id: $id, name: $name) {
+      _id
+      name
+    }
+  }
+`;
+
+export const DELETE_CAST_MEMBER = gql`
+  mutation deleteCastMember($id: ID!) {
+    deleteCastMember(_id: $id) {
+      _id
+    }
+  }
+`;
+
+export const ADD_EPISODE = gql`
+  mutation addEpisode($name: String!) {
+    addEpisode(name: $name) {
+      _id
+      name
+    }
+  }
+`;
+
+export const UPDATE_EPISODE = gql`
+  mutation updateEpisode($id: ID!, $name: String!) {
+    updateEpisode(_id: $id, name: $name) {
+      _id
+      name
+    }
+  }
+`;
+
+export const DELETE_EPISODE = gql`
+  mutation deleteEpisode($id: ID!) {
+    deleteEpisode(_id: $id) {
+      _id
+    }
+  }
+`;

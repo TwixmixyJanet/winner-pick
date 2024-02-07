@@ -20,7 +20,10 @@ export const QUERY_USER = gql`
         name
         photo
         description
-        castMembers
+        castMembers {
+          _id
+          name
+        }
         numMembers
         author
         createdAt
@@ -39,7 +42,10 @@ export const QUERY_ALL_GAMES = gql`
       name
       photo
       description
-      castMembers
+      castMembers {
+        _id
+        name
+      }
       numMembers
       author
       createdAt
@@ -50,6 +56,7 @@ export const QUERY_ALL_GAMES = gql`
     }
   }
 `;
+
 export const QUERY_GAME = gql`
   query getSingleGame($id: ID!) {
     game(_id: $id) {
@@ -57,7 +64,10 @@ export const QUERY_GAME = gql`
       name
       photo
       description
-      castMembers
+      castMembers {
+        _id
+        name
+      }
       numMembers
       author
       createdAt
@@ -122,6 +132,24 @@ export const QUERY_GROUP_GAME_PHOTOS = gql`
       groupId
       name
       photos
+    }
+  }
+`;
+
+export const QUERY_ALL_CAST_MEMBERS = gql`
+  query getAllCastMembers {
+    castMembers {
+      _id
+      name
+    }
+  }
+`;
+
+export const QUERY_ALL_EPISODES = gql`
+  query getAllEpisodes {
+    episodes {
+      _id
+      name
     }
   }
 `;
