@@ -1,5 +1,5 @@
 const db = require("../config/connection");
-const { User, Group, Game } = require("../models");
+const { User, Group, Game, CastMember, Episode } = require("../models");
 const cleanDB = require("./cleanDB");
 
 db.once("open", async () => {
@@ -139,6 +139,9 @@ db.once("open", async () => {
       {
         name: "Michelle Young",
       },
+      {
+        name: "Rachel Lindsay",
+      },
     ]);
 
     console.log("🎭 cast members seeded 🎭");
@@ -176,28 +179,7 @@ db.once("open", async () => {
           "https://m.media-amazon.com/images/M/MV5BYjFhYjQzMDUtNGYxZC00YjliLTlmYzAtODE1ZTU1M2ExY2I0XkEyXkFqcGdeQXVyMTE0MzQwMjgz._V1_QL75_UY281_CR31,0,500,281_.jpg",
         description:
           "Survivor Season 46 returns to Mamanuca Island, Fiji, with beautiful beaches and clear water.",
-        castMembers: [
-          castMembers[0]._id,
-          castMembers[1]._id,
-          castMembers[2]._id,
-          castMembers[3]._id,
-          castMembers[4]._id,
-          castMembers[5]._id,
-          castMembers[6]._id,
-          castMembers[7]._id,
-          castMembers[8]._id,
-          castMembers[9]._id,
-          castMembers[10]._id,
-          castMembers[11]._id,
-          castMembers[12]._id,
-          castMembers[13]._id,
-          castMembers[14]._id,
-          castMembers[15]._id,
-          castMembers[16]._id,
-          castMembers[17]._id,
-          castMembers[18]._id,
-          castMembers[19]._id,
-        ],
+        castMembers: castMembers.map((member) => member._id),
         numMembers: 18,
         groups: [groups[0]._id],
       },
