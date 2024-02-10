@@ -54,15 +54,10 @@ const resolvers = {
       return groupgame;
     },
     castMembers: async () => {
-      return await CastMember.find().populate([
-        "games",
-        "elimination",
-        "users",
-        "castMembers",
-      ]);
+      return await CastMember.find().populate("games");
     },
     castMember: async (parent, { _id }) => {
-      return await CastMember.findById(_id).populate("games");
+      return await CastMember.findById(_id);
     },
     elimination: async () => {
       return await Elimination.find();
