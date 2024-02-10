@@ -30,7 +30,6 @@ const castMemberSchema = new Schema({
   games: {
     type: Schema.Types.ObjectId,
     ref: "Game",
-    required: true,
   },
   elimination: {
     type: Schema.Types.ObjectId,
