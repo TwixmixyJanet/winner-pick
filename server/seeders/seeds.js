@@ -1,5 +1,5 @@
 const db = require("../config/connection");
-const { User, Group, Game, CastMember, Episode } = require("../models");
+const { User, Group, Game, CastMember, Elimination } = require("../models");
 const cleanDB = require("./cleanDB");
 
 db.once("open", async () => {
@@ -8,72 +8,72 @@ db.once("open", async () => {
     await cleanDB("Game", "games");
     await cleanDB("Group", "groups");
     await cleanDB("CastMember", "castmembers");
-    await cleanDB("Episode", "episodes");
+    await cleanDB("Elimination", "eliminations");
 
-    const episode = await Episode.insertMany([
+    const eliminations = await Elimination.insertMany([
       {
-        name: "Episode 1",
+        order: 1,
       },
       {
-        name: "Episode 2",
+        order: 2,
       },
       {
-        name: "Episode 3",
+        order: 3,
       },
       {
-        name: "Episode 4",
+        order: 4,
       },
       {
-        name: "Episode 5",
+        order: 5,
       },
       {
-        name: "Episode 6",
+        order: 6,
       },
       {
-        name: "Episode 7",
+        order: 7,
       },
       {
-        name: "Episode 8",
+        order: 8,
       },
       {
-        name: "Episode 9",
+        order: 9,
       },
       {
-        name: "Episode 10",
+        order: 10,
       },
       {
-        name: "Episode 11",
+        order: 11,
       },
       {
-        name: "Episode 12",
+        order: 12,
       },
       {
-        name: "Episode 13",
+        order: 13,
       },
       {
-        name: "Episode 14",
+        order: 14,
       },
       {
-        name: "Episode 15",
+        order: 15,
       },
       {
-        name: "Episode 16",
+        order: 16,
       },
       {
-        name: "Episode 17",
+        order: 17,
       },
       {
-        name: "Episode 18",
+        order: 18,
       },
       {
-        name: "Episode 19",
+        order: 19,
       },
       {
-        name: "Episode 20",
+        order: 20,
       },
     ]);
 
-    console.log("📺 episodes seeded 📺");
+    console.log("🔥 eliminations seeded 🔥");
 
     const castMembers = await CastMember.insertMany([
       {
