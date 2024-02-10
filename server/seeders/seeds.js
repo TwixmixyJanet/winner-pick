@@ -198,8 +198,6 @@ db.once("open", async () => {
           castMembers[15]._id,
           castMembers[16]._id,
           castMembers[17]._id,
-          castMembers[18]._id,
-          castMembers[19]._id,
         ],
         numMembers: 18,
         groups: [groups[0]._id],
