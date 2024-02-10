@@ -217,28 +217,11 @@ export const DELETE_CAST_MEMBER = gql`
   }
 `;
 
-export const ADD_EPISODE = gql`
-  mutation addEpisode($name: String!) {
-    addEpisode(name: $name) {
+export const ELIMINATED = gql`
+  mutation eliminated($order: Int!) {
+    eliminated(order: $order) {
       _id
-      name
-    }
-  }
-`;
-
-export const UPDATE_EPISODE = gql`
-  mutation updateEpisode($id: ID!, $name: String!) {
-    updateEpisode(_id: $id, name: $name) {
-      _id
-      name
-    }
-  }
-`;
-
-export const DELETE_EPISODE = gql`
-  mutation deleteEpisode($id: ID!) {
-    deleteEpisode(_id: $id) {
-      _id
+      order
     }
   }
 `;

@@ -32,12 +32,10 @@ const castMemberSchema = new Schema({
     ref: "Game",
     required: true,
   },
-  episodes: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Episode",
-    },
-  ],
+  elimination: {
+    type: Schema.Types.ObjectId,
+    ref: "Elimination",
+  },
 });
 
 const CastMember = mongoose.model("CastMember", castMemberSchema);

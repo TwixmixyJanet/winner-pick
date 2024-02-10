@@ -145,11 +145,11 @@ export const QUERY_ALL_CAST_MEMBERS = gql`
   }
 `;
 
-export const QUERY_ALL_EPISODES = gql`
-  query getAllEpisodes {
-    episodes {
+export const QUERY_ALL_ELIMINATIONS = gql`
+  query getAllEliminations {
+    eliminations {
       _id
-      name
+      order
     }
   }
 `;

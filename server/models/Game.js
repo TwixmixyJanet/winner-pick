@@ -47,16 +47,6 @@ const gameSchema = new Schema({
       ref: "CastMember",
     },
   ],
-  episodes: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Episode",
-    },
-  ],
-  currentEpisode: {
-    type: Schema.Types.ObjectId,
-    ref: "Episode",
-  },
 });
 
 const Game = mongoose.model("Game", gameSchema);

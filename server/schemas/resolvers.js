@@ -61,8 +61,8 @@ const resolvers = {
     castMember: async (parent, { _id }) => {
       return await CastMember.findById(_id).populate("games");
     },
-    episodes: async () => {
-      return await Episode.find();
+    elimination: async () => {
+      return await Elimination.find();
     },
   },
 
@@ -223,23 +223,18 @@ const resolvers = {
       return deletedCastMember;
     },
 
-    addEpisode: async (parent, { name }) => {
-      const newEpisode = await Episode.create({ name });
-      return newEpisode;
-    },
+    eliminated: async (parent, { _id }, context) => {
+      if (context.castMember) {
+        const eliminateCastMember = await CastMember.findByIdAndUpdate(
+          { _id: context.castMember._id },
+          { $addToSet: { eliminateCastMember: _id } },
+          { new: true }
+        ).populate("eliminateCastMember");
 
-    updateEpisode: async (parent, { _id, name }) => {
-      const updatedEpisode = await Episode.findByIdAndUpdate(
-        { _id },
-        { name },
-        { new: true }
-      );
-      return updatedEpisode;
-    },
+        return eliminateCastMember;
+      }
 
-    deleteEpisode: async (parent, { _id }) => {
-      const deletedEpisode = await Episode.findByIdAndDelete(_id);
-      return deletedEpisode;
+      throw new AuthenticationError("You need to be logged in!");
     },
   },
 };

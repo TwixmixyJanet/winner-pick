@@ -33,15 +33,14 @@ const typeDefs = `
     groups: [Group]
     users: [User]
     games: [Game]
-    episodes: [Episode]
+    elimination: [Elimination]
   }
   
-  type Episode {
+  type Elimination {
     _id: ID
-    name: String!
-    games: [Game]
-    castMembers: [CastMember]
-    eliminated: [CastMember]
+    order: Int!
+    games: Game
+    castMembers: CastMember
   }
 
   type Auth {
@@ -66,7 +65,7 @@ const typeDefs = `
     groupGamePhotos(username: String!): [Photos]
     castMembers: [CastMember]
     castMember(_id: ID!): CastMember
-    episodes: [Episode]
+    elimination: [Elimination]
   }
 
   type Mutation {
@@ -83,9 +82,7 @@ const typeDefs = `
     addCastMember(name: String!): CastMember
     updateCastMember(_id: ID!, name: String): CastMember
     deleteCastMember(_id: ID!): CastMember
-    addEpisode(name: String!): Episode
-    updateEpisode(_id: ID!, name: String): Episode
-    deleteEpisode(_id: ID!): Episode
+    eliminated(_id: ID!): CastMember
   }
 `;
 
