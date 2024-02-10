@@ -30,10 +30,9 @@ const typeDefs = `
   type CastMember {
     _id: ID
     name: String!
-    groups: [Group]
-    users: [User]
-    games: [Game]
-    elimination: [Elimination]
+    users: User
+    games: Game
+    elimination: Elimination
   }
   
   type Elimination {

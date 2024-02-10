@@ -7,9 +7,7 @@ const resolvers = {
       return await Game.find().populate("groups");
     },
     game: async (parent, { _id }) => {
-      return await Game.findById(_id)
-        .populate("groups")
-        .populate("castMembers");
+      return await Game.findById(_id).populate(["groups", "castMembers"]);
     },
 
     groups: async () => {
@@ -56,7 +54,12 @@ const resolvers = {
       return groupgame;
     },
     castMembers: async () => {
-      return await CastMember.find().populate("games");
+      return await CastMember.find().populate([
+        "games",
+        "elimination",
+        "users",
+        "castMembers",
+      ]);
     },
     castMember: async (parent, { _id }) => {
       return await CastMember.findById(_id).populate("games");
@@ -227,9 +230,9 @@ const resolvers = {
       if (context.castMember) {
         const eliminateCastMember = await CastMember.findByIdAndUpdate(
           { _id: context.castMember._id },
-          { $addToSet: { eliminateCastMember: _id } },
+          { $addToSet: { eliminatedCastMember: _id } },
           { new: true }
-        ).populate("eliminateCastMember");
+        ).populate("eliminatedCastMember");
 
         return eliminateCastMember;
       }
