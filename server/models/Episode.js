@@ -18,24 +18,20 @@ const episodeSchema = new Schema({
   //     type: String,
   //     required: true,
   // },
-  games: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Game",
-    },
-  ],
+  games: {
+    type: Schema.Types.ObjectId,
+    ref: "Game",
+  },
   castMembers: [
     {
       type: Schema.Types.ObjectId,
       ref: "CastMember",
     },
   ],
-  eliminated: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "CastMember",
-    },
-  ],
+  eliminated: {
+    type: Schema.Types.ObjectId,
+    ref: "CastMember",
+  },
 });
 
 const Episode = mongoose.model("Episode", episodeSchema);
