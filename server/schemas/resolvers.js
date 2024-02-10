@@ -7,7 +7,9 @@ const resolvers = {
       return await Game.find().populate("groups");
     },
     game: async (parent, { _id }) => {
-      return await Game.findById(_id).populate("groups");
+      return await Game.findById(_id)
+        .populate("groups")
+        .populate("castMembers");
     },
 
     groups: async () => {
