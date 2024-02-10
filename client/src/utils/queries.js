@@ -41,10 +41,10 @@ export const QUERY_ALL_GAMES = gql`
       name
       photo
       description
-      castMembers {
-        _id
-        name
-      }
+      # castMembers {
+      #   _id
+      #   name
+      # } need to add this back in once I figure out why it's having a null name issue
       numMembers
       createdAt
       groups {
