@@ -20,10 +20,10 @@ export const QUERY_USER = gql`
         name
         photo
         description
-        castMembers {
-          _id
-          name
-        }
+        # castMembers {
+        #   _id
+        #   name
+        # }
         numMembers
         createdAt
       }
@@ -101,10 +101,10 @@ export const QUERY_GROUP_GAME = gql`
       name
       photo
       description
-      castMembers {
-        _id
-        name
-      }
+      # castMembers {
+      #  _id
+      #  name
+      # }
       numMembers
       createdAt
       groups {

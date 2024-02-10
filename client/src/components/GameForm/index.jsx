@@ -46,14 +46,18 @@ export default function GameForm() {
     description: "",
     castMembers: "",
     numMembers: "",
-    groupId: "",
+    groupId: "", // The selected group id
   });
 
   const handleSubmit = async () => {
     try {
       const { name, description, numMembers, groupId } = formData;
 
-      const { data } = await addGame({
+      const castMemberIds = data.addCastMember.map(
+        (castMember) => castMember._id
+      );
+      // Add game
+      const gameResult = await addGame({
         variables: {
           name: name,
           description: description,
@@ -61,10 +65,12 @@ export default function GameForm() {
           groupId: groupId,
           photo: myImage,
           author: username,
-          castMembers: castMembers,
+          castMembers: castMemberIds,
         },
         refetchQueries: [{ query: QUERY_USER, variables: { username } }],
       });
+
+      const gameId = gameResult.data.addGame._id;
 
       // Reset form state
       setFormData({
@@ -140,14 +146,13 @@ export default function GameForm() {
         variables: { name: name },
       });
 
-      // Extract the ID of the newly added cast member from the response
-      const newCastMemberId = data.addCastMember._id;
-
-      // Update the castMembers state with the ID of the newly added cast member
-      setCastMembers((prevCastMembers) => [
-        ...prevCastMembers,
-        newCastMemberId,
-      ]);
+      // Update the castMembers state with the newly added cast member
+      if (data && data.addCastMember) {
+        setCastMembers((prevCastMembers) => [
+          ...prevCastMembers,
+          data.addCastMember.name,
+        ]);
+      }
 
       // Clear the input field after adding cast member
       setName("");
@@ -216,6 +221,7 @@ export default function GameForm() {
                 Add Cast Member
               </button>
             </div>
+
             <ul>
               {castMembers.map((castMember, index) => (
                 <li key={index}>{castMember}</li>
