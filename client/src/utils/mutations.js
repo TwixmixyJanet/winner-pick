@@ -89,7 +89,7 @@ export const ADD_GAME = gql`
     $name: String!
     $photo: String!
     $description: String!
-    $castMembers: [String!]
+    $castMembers: [ID!]!
     $numMembers: Int!
     $groupId: ID
   ) {
@@ -105,7 +105,10 @@ export const ADD_GAME = gql`
       name
       photo
       description
-      castMembers
+      castMembers {
+        _id # Include subfields for each CastMember
+        name # Include any other desired fields
+      }
       numMembers
       createdAt
       groups {

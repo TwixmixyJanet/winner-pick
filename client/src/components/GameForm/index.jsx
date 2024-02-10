@@ -8,8 +8,6 @@ import { ADD_GAME, ADD_CAST_MEMBER } from "../../utils/mutations";
 
 import "../../pages/style.css";
 
-import CastMemberForm from "../CastMemberForm";
-
 initMDB({ Input, Ripple });
 
 export default function GameForm() {
@@ -48,48 +46,41 @@ export default function GameForm() {
     description: "",
     castMembers: "",
     numMembers: "",
-    groupId: "", // The selected group id
+    groupId: "",
   });
 
   const handleSubmit = async () => {
     try {
-      console.log("formData: ", formData);
-      console.log("myImage: ", myImage);
-      console.log("username: ", username);
-      const { name, description, castMembers, numMembers, groupId } = formData;
-      const { data, error } = await addGame({
+      const { name, description, numMembers, groupId } = formData;
+
+      const { data } = await addGame({
         variables: {
           name: name,
           description: description,
-          castMembers: castMembers,
           numMembers: parseInt(numMembers),
           groupId: groupId,
           photo: myImage,
           author: username,
+          castMembers: castMembers,
         },
         refetchQueries: [{ query: QUERY_USER, variables: { username } }],
       });
 
-      //Reset the form after successful submission
+      // Reset form state
       setFormData({
         name: "",
         description: "",
-        castMembers: "",
         numMembers: "",
         groupId: "",
       });
 
       setMyImage("");
 
-      if (data) {
-        window.location.replace(window.location.origin + "/dashboard");
-      }
-
-      if (error) {
-        setuploadError("something went wrong, please try again");
-      }
+      // Redirect or handle success as needed
+      window.location.replace(window.location.origin + "/dashboard");
     } catch (error) {
       console.error("Error submitting game:", error);
+      setuploadError("Something went wrong, please try again");
     }
   };
 
@@ -135,26 +126,34 @@ export default function GameForm() {
     // This is to prevent the page from reloading when someone clicks the button to upload a picture
   };
 
-  const { data: castMembersData } = useQuery(QUERY_ALL_CAST_MEMBERS);
+  const [name, setName] = useState("");
   const [castMembers, setCastMembers] = useState([]);
-
+  // Define the ADD_CAST_MEMBER mutation
   const [addCastMember] = useMutation(ADD_CAST_MEMBER);
 
-  const handleAddCastMember = async (name) => {
+  const handleAddCastMember = async () => {
     try {
+      if (!name.trim()) return;
+
+      // Call the ADD_CAST_MEMBER mutation
       const { data } = await addCastMember({
         variables: { name: name },
       });
 
-      if (data && data.addCastMember) {
-        // Update the castMembers state with the newly added cast member
-        setCastMembers((prevCastMembers) => [
-          ...prevCastMembers,
-          data.addCastMember.name,
-        ]);
-      }
+      // Extract the ID of the newly added cast member from the response
+      const newCastMemberId = data.addCastMember._id;
+
+      // Update the castMembers state with the ID of the newly added cast member
+      setCastMembers((prevCastMembers) => [
+        ...prevCastMembers,
+        newCastMemberId,
+      ]);
+
+      // Clear the input field after adding cast member
+      setName("");
     } catch (error) {
       console.error("Error adding cast member:", error);
+      // Handle error as needed
     }
   };
 
@@ -206,16 +205,22 @@ export default function GameForm() {
 
         <div className="col-5 p-0">
           <div data-mdb-input-init className="form-outline mb-3">
+            <div>
+              <input
+                type="text"
+                placeholder="Enter cast member name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <button type="button" onClick={handleAddCastMember}>
+                Add Cast Member
+              </button>
+            </div>
             <ul>
-              {castMembers ? (
-                castMembers.map((castMember, index) => (
-                  <li key={index}>{castMember}</li>
-                ))
-              ) : (
-                <li>No cast members available</li>
-              )}
+              {castMembers.map((castMember, index) => (
+                <li key={index}>{castMember}</li>
+              ))}
             </ul>
-            <CastMemberForm onAddCastMember={handleAddCastMember} />
           </div>
         </div>
         <div data-mdb-input-init className="form-outline m-auto row">
