@@ -48,7 +48,7 @@ const Carousels = () => {
         <div className="carousel-inner rounded-5 shadow-3-strong">
           <div className="carousel-item">
             <img
-              src="https://private-user-images.githubusercontent.com/117195025/302066037-5c680cd8-7a3a-467d-ac3b-b036323cae40.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDcwMDA5MTQsIm5iZiI6MTcwNzAwMDYxNCwicGF0aCI6Ii8xMTcxOTUwMjUvMzAyMDY2MDM3LTVjNjgwY2Q4LTdhM2EtNDY3ZC1hYzNiLWIwMzYzMjNjYWU0MC5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwMjAzJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDIwM1QyMjUwMTRaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT05ZGIwNmRmOWFlZjkyYzFiMjAwMjc1OTE4OWY0YTY1OTRhZDJmZmVhMzJjZmU5YjE4MDljOGJiMzViMjZmZDAwJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.se3Oi0lnusvNg_WdjoVZ-Xy68xYwOHsK7D5ZJbk1Mro"
+              src="https://paramountshop.com/cdn/shop/files/survivor-mobile-updated.png?v=1695833270"
               className="d-block w-100"
               alt="Winner Pick"
             />
@@ -57,7 +57,7 @@ const Carousels = () => {
 
           <div className="carousel-item active">
             <img
-              src="https://private-user-images.githubusercontent.com/117195025/302066036-09f02585-7b6d-4230-a669-268445cde6c9.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDcwMDA5MTQsIm5iZiI6MTcwNzAwMDYxNCwicGF0aCI6Ii8xMTcxOTUwMjUvMzAyMDY2MDM2LTA5ZjAyNTg1LTdiNmQtNDIzMC1hNjY5LTI2ODQ0NWNkZTZjOS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwMjAzJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDIwM1QyMjUwMTRaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1lNWM4MWM2ZjNlNjAxODVhMjJhOWJiN2RiNTAyNWY5NTQ0NGZjNGQ0OTcwYjAyMzkwYmIxNmQ5OTc1NWQ1ZTdjJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.kmO0x1N_jdGr9sCKdUnD8aawZls7v6GVAqDmlLYwTUU"
+              src="https://parade.com/.image/ar_1.91%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cg_faces:center%2Cq_auto:good%2Cw_1200/MjAzMDQ3ODg4NzI3NTgxODc4/the-bachelor-joey-graziadei.jpg"
               className="d-block w-100"
               alt="Raccoon Survivor"
             />
@@ -66,7 +66,7 @@ const Carousels = () => {
 
           <div className="carousel-item">
             <img
-              src="https://private-user-images.githubusercontent.com/117195025/302066034-ddc7bb42-dd70-4bef-bf5b-79c384adcbe9.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDcwMDA5MTQsIm5iZiI6MTcwNzAwMDYxNCwicGF0aCI6Ii8xMTcxOTUwMjUvMzAyMDY2MDM0LWRkYzdiYjQyLWRkNzAtNGJlZi1iZjViLTc5YzM4NGFkY2JlOS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwMjAzJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDIwM1QyMjUwMTRaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT04ZjAwOTUyZDNiZjg4MTQ0MGE4YWYwZjg4MzFmM2I0ODFhMDZlNDU5NjMxM2FmNzMzZDQ4ZWEzOTZlZWJlOTBiJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.tsPxo7HsTrjH5m_CjJUoB60jmT1RjQOkFq3qGmaOfpw"
+              src="https://www.etonline.com/sites/default/files/images/2017-04/1280_rachel_lindsay_bachelorette_twitter.jpg"
               className="d-block w-100"
               alt="Bachelor Squirrel"
             />
