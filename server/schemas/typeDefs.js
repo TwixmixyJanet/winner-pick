@@ -9,7 +9,7 @@ const typeDefs = `
     name: String!
     photo: String!
     description: String!
-    castMembers: [CastMember]
+    castMembersGame: [CastMember]
     numMembers: Int!
     createdAt: String!
     groups: Group
@@ -64,6 +64,7 @@ const typeDefs = `
     user(username: String!): User
     groupMembers(groupId: ID!): [User]
     groupGamePhotos(username: String!): [Photos]
+    castMembersGame: [CastMember]
     castMembers: [CastMember]
     episodes: [Episode]
   }

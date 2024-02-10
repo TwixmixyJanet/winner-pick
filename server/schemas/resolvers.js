@@ -55,11 +55,14 @@ const resolvers = {
       }
       return groupgame;
     },
-    castMembers: async (parent) => {
+    castMembersGame: async (parent) => {
       // Assuming 'parent' contains the current game being resolved
       const game = await Game.findById(parent._id).populate("castMembers");
       console.log(game); // Log the 'game' object to see if it's retrieved correctly
       return game.castMembers;
+    },
+    castMembers: async () => {
+      return await CastMember.find();
     },
     episodes: async () => {
       return await Episode.find();
