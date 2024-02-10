@@ -101,7 +101,10 @@ export const QUERY_GROUP_GAME = gql`
       name
       photo
       description
-      castMembers
+      castMembers {
+        _id
+        name
+      }
       numMembers
       createdAt
       groups {
@@ -111,6 +114,7 @@ export const QUERY_GROUP_GAME = gql`
     }
   }
 `;
+
 export const QUERY_GROUP_MEMBER = gql`
   query groupMembers($groupId: ID!) {
     groupMembers(groupId: $groupId) {
