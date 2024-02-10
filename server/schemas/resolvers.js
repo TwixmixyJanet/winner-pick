@@ -4,7 +4,7 @@ const { signToken, AuthenticationError } = require("../utils/auth");
 const resolvers = {
   Query: {
     games: async () => {
-      return await Game.find().populate("groups");
+      return await Game.find().populate(["groups", "castMembers"]);
     },
     game: async (parent, { _id }) => {
       return await Game.findById(_id).populate(["groups", "castMembers"]);
@@ -129,10 +129,24 @@ const resolvers = {
     },
 
     addGame: async (parent, args, context) => {
-      const newGame = await Game.create(args);
-      const addGameToUser = await User.findByIdAndUpdate(
+      const newGame = await Game.create({
+        // addGame
+        name: args.name,
+        photo: args.photo,
+        description: args.description,
+        numMembers: args.numMembers,
+        groupId: args.groupId,
+        castMembers: [],
+      });
+      await User.findByIdAndUpdate(
+        // addGameToUser
         { _id: context.user._id },
         { $addToSet: { games: newGame._id } },
+        { new: true }
+      );
+      const addCastMemberToGame = await Game.findByIdAndUpdate(
+        { _id: newGame._id },
+        { $addToSet: { castMembers: { $each: args.castMembers } } },
         { new: true }
       );
       if (args.groupId) {
@@ -143,7 +157,7 @@ const resolvers = {
         );
         return addGameToGroup;
       }
-      return newGame;
+      return addCastMemberToGame;
     },
 
     updateGame: async (

@@ -5,7 +5,6 @@ const { Schema } = mongoose;
 const castMemberSchema = new Schema({
   name: {
     type: String,
-    required: true,
     trim: true,
   },
   // photo: {

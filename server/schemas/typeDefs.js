@@ -29,7 +29,7 @@ const typeDefs = `
 
   type CastMember {
     _id: ID
-    name: String!
+    name: String
     users: User
     games: Game
     elimination: Elimination

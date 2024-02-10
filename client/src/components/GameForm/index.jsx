@@ -44,18 +44,18 @@ export default function GameForm() {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    castMembers: "",
+    castMembers: [],
     numMembers: "",
     groupId: "", // The selected group id
   });
 
   const handleSubmit = async () => {
     try {
-      const { name, description, numMembers, groupId } = formData;
-
-      const castMemberIds = data.addCastMember.map(
-        (castMember) => castMember._id
-      );
+      const { name, description, castMembers, numMembers, groupId } = formData;
+      console.log(castMembers);
+      // const castMemberIds = data.addCastMember.map(
+      //   (castMember) => castMember._id
+      // );
       // Add game
       const gameResult = await addGame({
         variables: {
@@ -65,12 +65,13 @@ export default function GameForm() {
           groupId: groupId,
           photo: myImage,
           author: username,
-          castMembers: castMemberIds,
+          castMembers: castMembers,
         },
         refetchQueries: [{ query: QUERY_USER, variables: { username } }],
       });
 
-      const gameId = gameResult.data.addGame._id;
+      console.log(gameResult);
+      // const gameId = gameResult.data.addGame._id;
 
       // Reset form state
       setFormData({
@@ -152,6 +153,11 @@ export default function GameForm() {
           ...prevCastMembers,
           data.addCastMember.name,
         ]);
+        setFormData({
+          ...formData,
+          castMembers: [...formData.castMembers, data.addCastMember._id],
+        });
+        console.log(formData.castMembers);
       }
 
       // Clear the input field after adding cast member
