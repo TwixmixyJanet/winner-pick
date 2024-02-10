@@ -221,7 +221,6 @@ export default function GameForm() {
                 Add Cast Member
               </button>
             </div>
-
             <ul>
               {castMembers.map((castMember, index) => (
                 <li key={index}>{castMember}</li>

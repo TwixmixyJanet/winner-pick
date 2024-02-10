@@ -159,7 +159,10 @@ export const DELETE_GAME = gql`
       name
       photo
       description
-      castMembers
+      castMembers {
+        _id
+        name
+      }
       numMembers
       createdAt
       groups {
