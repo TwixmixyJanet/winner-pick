@@ -98,13 +98,19 @@ function Game() {
                       <div className="field-title m-0">Description:</div>{" "}
                       {game.description}
                     </div>
-                    <div className="col-md-6 mb-1">
-                      <div className="field-title m-0">Cast Members:</div>{" "}
-                      {game.castMembers}
-                    </div>
+                    {game.castMembers ? (
+                      <div className="col-md-6 mb-1">
+                        <div className="field-title m-0">Cast Members:</div>{" "}
+                        {game.castMembers.map((castMember) => (
+                          <div key={castMember._id}>
+                            <p>{castMember.name}</p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : null}
                     <div className="col-md-6 mt-5 mb-2">
                       <div className="field-title m-0  d-flex text-start">
-                        Number of Members:{" "}
+                        Number of Cast Members:{" "}
                       </div>
                       <div className="textwrap d-flex text-start">
                         {game.numMembers}
@@ -125,7 +131,7 @@ function Game() {
                     <div className="col m-auto p-1">
                       <div className="badge author-badge p-auto m-2">
                         <i className="fas fa-user fa-lg m-2"></i>
-                        <p className=" m-0">Author: {game.author}</p>
+                        <p className=" m-0">Author: {game.user}</p>
                       </div>
                     </div>
                     <div className="col m-auto p-1">
