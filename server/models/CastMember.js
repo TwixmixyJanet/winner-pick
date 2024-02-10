@@ -17,24 +17,21 @@ const castMemberSchema = new Schema({
   //     type: String,
   //     required: true,
   // },
-  groups: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Group",
-    },
-  ],
-  users: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
-  ],
-  games: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Game",
-    },
-  ],
+  // groups: [
+  //   {
+  //     type: Schema.Types.ObjectId,
+  //     ref: "Group",
+  //   },
+  // ],
+  users: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
+  games: {
+    type: Schema.Types.ObjectId,
+    ref: "Game",
+    required: true,
+  },
   episodes: [
     {
       type: Schema.Types.ObjectId,
