@@ -3,10 +3,12 @@ import { useQuery, useMutation } from "@apollo/client";
 import { useEffect, useRef, useState } from "react";
 import Auth from "../../utils/auth";
 
-import { QUERY_USER } from "../../utils/queries";
-import { ADD_GAME } from "../../utils/mutations";
+import { QUERY_USER, QUERY_ALL_CAST_MEMBERS } from "../../utils/queries";
+import { ADD_GAME, ADD_CAST_MEMBER } from "../../utils/mutations";
 
 import "../../pages/style.css";
+
+import CastMemberForm from "../CastMemberForm";
 
 initMDB({ Input, Ripple });
 
@@ -133,6 +135,29 @@ export default function GameForm() {
     // This is to prevent the page from reloading when someone clicks the button to upload a picture
   };
 
+  const { data: castMembersData } = useQuery(QUERY_ALL_CAST_MEMBERS);
+  const [castMembers, setCastMembers] = useState([]);
+
+  const [addCastMember] = useMutation(ADD_CAST_MEMBER);
+
+  const handleAddCastMember = async (name) => {
+    try {
+      const { data } = await addCastMember({
+        variables: { name: name },
+      });
+
+      if (data && data.addCastMember) {
+        // Update the castMembers state with the newly added cast member
+        setCastMembers((prevCastMembers) => [
+          ...prevCastMembers,
+          data.addCastMember.name,
+        ]);
+      }
+    } catch (error) {
+      console.error("Error adding cast member:", error);
+    }
+  };
+
   return (
     <form className="mb-5 p-1">
       <div className="col m-auto">
@@ -150,7 +175,6 @@ export default function GameForm() {
             </label>
           </div>
         </div>
-
         <div data-mdb-input-init className="form-outline mb-3">
           <input
             type="text"
@@ -164,7 +188,6 @@ export default function GameForm() {
             Game Description
           </label>
         </div>
-
         <div className="col-5 p-0">
           <div data-mdb-input-init className="form-outline mb-3">
             <input
@@ -181,19 +204,20 @@ export default function GameForm() {
           </div>
         </div>
 
-        <div data-mdb-input-init className="form-outline mb-3">
-          <textarea
-            className="form-control"
-            id="castMembers"
-            rows="4"
-            value={formData.castMembers}
-            onChange={handleInputChange}
-          ></textarea>
-          <label className="form-label" htmlFor="castMembers">
-            Cast Members (Separated by commas)
-          </label>
+        <div className="col-5 p-0">
+          <div data-mdb-input-init className="form-outline mb-3">
+            <ul>
+              {castMembers ? (
+                castMembers.map((castMember, index) => (
+                  <li key={index}>{castMember}</li>
+                ))
+              ) : (
+                <li>No cast members available</li>
+              )}
+            </ul>
+            <CastMemberForm onAddCastMember={handleAddCastMember} />
+          </div>
         </div>
-
         <div data-mdb-input-init className="form-outline m-auto row">
           <label className="visually-hidden">Group</label>
           <select
@@ -226,7 +250,6 @@ export default function GameForm() {
             )}
           </select>
         </div>
-
         <div
           data-mdb-input-init
           className="form-outline mt-4 m-auto row"
@@ -250,7 +273,6 @@ export default function GameForm() {
             Upload a picture of your game
           </sub>
         </div>
-
         <button
           data-mdb-ripple-init
           type="button"
