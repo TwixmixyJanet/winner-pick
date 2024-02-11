@@ -111,7 +111,7 @@ function Dashboard() {
                       className="btn"
                       data-mdb-ripple-init
                     >
-                      See Game
+                      Play Game
                     </Link>
                     <button
                       className="btn"
