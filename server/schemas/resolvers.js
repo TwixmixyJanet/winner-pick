@@ -1,13 +1,13 @@
-const { User, Game, Group } = require("../models");
+const { User, Game, Group, CastMember, Episode } = require("../models");
 const { signToken, AuthenticationError } = require("../utils/auth");
 
 const resolvers = {
   Query: {
     games: async () => {
-      return await Game.find().populate("groups");
+      return await Game.find().populate(["groups", "castMembers"]);
     },
     game: async (parent, { _id }) => {
-      return await Game.findById(_id).populate("groups");
+      return await Game.findById(_id).populate(["groups", "castMembers"]);
     },
 
     groups: async () => {
@@ -52,6 +52,15 @@ const resolvers = {
         }
       }
       return groupgame;
+    },
+    castMembers: async () => {
+      return await CastMember.find().populate("games");
+    },
+    castMember: async (parent, { _id }) => {
+      return await CastMember.findById(_id);
+    },
+    elimination: async () => {
+      return await Elimination.find();
     },
   },
 
@@ -120,10 +129,24 @@ const resolvers = {
     },
 
     addGame: async (parent, args, context) => {
-      const newGame = await Game.create(args);
-      const addGameToUser = await User.findByIdAndUpdate(
+      const newGame = await Game.create({
+        // addGame
+        name: args.name,
+        photo: args.photo,
+        description: args.description,
+        numMembers: args.numMembers,
+        groupId: args.groupId,
+        castMembers: [],
+      });
+      await User.findByIdAndUpdate(
+        // addGameToUser
         { _id: context.user._id },
         { $addToSet: { games: newGame._id } },
+        { new: true }
+      );
+      const addCastMemberToGame = await Game.findByIdAndUpdate(
+        { _id: newGame._id },
+        { $addToSet: { castMembers: { $each: args.castMembers } } },
         { new: true }
       );
       if (args.groupId) {
@@ -134,21 +157,12 @@ const resolvers = {
         );
         return addGameToGroup;
       }
-      return newGame;
+      return addCastMemberToGame;
     },
 
     updateGame: async (
       parent,
-      {
-        _id,
-        name,
-        photo,
-        description,
-        castMembers,
-        numMembers,
-        author,
-        groupId,
-      }
+      { _id, name, photo, description, castMembers, numMembers, groupId }
     ) => {
       const updateGame = await Game.findByIdAndUpdate(
         { _id: _id },
@@ -158,7 +172,6 @@ const resolvers = {
           description: description,
           castMembers: castMembers,
           numMembers: numMembers,
-          author: author,
           groups: groupId,
         },
         { new: true }
@@ -200,6 +213,37 @@ const resolvers = {
         ).populate("joinedGames");
 
         return updatedUser;
+      }
+
+      throw new AuthenticationError("You need to be logged in!");
+    },
+    addCastMember: async (parent, { name }) => {
+      const newCastMember = await CastMember.create({ name });
+      return newCastMember;
+    },
+    updateCastMember: async (parent, { _id, name }) => {
+      const updatedCastMember = await CastMember.findByIdAndUpdate(
+        { _id },
+        { name },
+        { new: true }
+      );
+      return updatedCastMember;
+    },
+
+    deleteCastMember: async (parent, { _id }) => {
+      const deletedCastMember = await CastMember.findByIdAndDelete(_id);
+      return deletedCastMember;
+    },
+
+    eliminated: async (parent, { _id }, context) => {
+      if (context.castMember) {
+        const eliminateCastMember = await CastMember.findByIdAndUpdate(
+          { _id: context.castMember._id },
+          { $addToSet: { eliminatedCastMember: _id } },
+          { new: true }
+        ).populate("eliminatedCastMember");
+
+        return eliminateCastMember;
       }
 
       throw new AuthenticationError("You need to be logged in!");

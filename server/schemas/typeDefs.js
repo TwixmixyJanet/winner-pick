@@ -5,19 +5,18 @@ const typeDefs = `
   }
 
   type Game {
-    _id: ID
+    _id: ID!
     name: String!
     photo: String!
     description: String!
-    castMembers: [String!]
+    castMembers: [CastMember]
     numMembers: Int!
-    author: String!
     createdAt: String!
     groups: Group
   }
 
   type User {
-    _id: ID
+    _id: ID!
     firstName: String!
     lastName: String!
     username: String!
@@ -26,6 +25,21 @@ const typeDefs = `
     groups: [Group]
     games: [Game]
     joinedGames: [Game]
+  }
+
+  type CastMember {
+    _id: ID
+    name: String
+    users: User
+    games: Game
+    elimination: Elimination
+  }
+  
+  type Elimination {
+    _id: ID
+    order: Int!
+    games: Game
+    castMembers: CastMember
   }
 
   type Auth {
@@ -44,10 +58,13 @@ const typeDefs = `
     game(_id: ID!): Game
     groups: [Group]
     group(_id: ID!): Group
-    groupGame( groupId : ID!): [Game]
+    groupGame(groupId: ID!): [Game]
     user(username: String!): User
-    groupMembers( groupId : ID!): [User]
+    groupMembers(groupId: ID!): [User]
     groupGamePhotos(username: String!): [Photos]
+    castMembers: [CastMember]
+    castMember(_id: ID!): CastMember
+    elimination: [Elimination]
   }
 
   type Mutation {
@@ -56,11 +73,15 @@ const typeDefs = `
     addGroup(name: String!): Group
     joinGroup(groupId: ID!): User
     leaveGroup(groupId: ID!): User
-    addGame(name: String!, photo: String!, description: String!, castMembers: [String!], numMembers: Int!, author: String!, groupId: ID): Game
-    updateGame(_id: ID!, name: String, photo: String, description: String!, castMembers: [String], numMembers: Int, author: String, groupId: ID): Game
+    addGame(name: String!, photo: String!, description: String!, castMembers: [ID!]!, numMembers: Int!, groupId: ID): Game
+    updateGame(_id: ID!, name: String, photo: String, description: String, castMembers: [ID], numMembers: Int, groupId: ID): Game
     deleteGame(_id: ID!): Game
     joinGame(_id: ID!): User
     leaveGame(_id: ID!): User
+    addCastMember(name: String!): CastMember
+    updateCastMember(_id: ID!, name: String): CastMember
+    deleteCastMember(_id: ID!): CastMember
+    eliminated(_id: ID!): CastMember
   }
 `;
 

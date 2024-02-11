@@ -89,9 +89,8 @@ export const ADD_GAME = gql`
     $name: String!
     $photo: String!
     $description: String!
-    $castMembers: [String!]
+    $castMembers: [ID!]!
     $numMembers: Int!
-    $author: String!
     $groupId: ID
   ) {
     addGame(
@@ -100,16 +99,17 @@ export const ADD_GAME = gql`
       description: $description
       castMembers: $castMembers
       numMembers: $numMembers
-      author: $author
       groupId: $groupId
     ) {
       _id
       name
       photo
       description
-      castMembers
+      castMembers {
+        _id # Include subfields for each CastMember
+        name # Include any other desired fields
+      }
       numMembers
-      author
       createdAt
       groups {
         _id
@@ -126,7 +126,6 @@ export const UPDATE_GAME = gql`
     $description: String!
     $castMembers: [String!]
     $numMembers: Int!
-    $author: String!
     $groupId: ID
   ) {
     updateGame(
@@ -136,7 +135,6 @@ export const UPDATE_GAME = gql`
       description: $description
       castMembers: $castMembers
       numMembers: $numMembers
-      author: $author
       groupId: $groupId
     ) {
       _id
@@ -145,7 +143,6 @@ export const UPDATE_GAME = gql`
       description
       castMembers
       numMembers
-      author
       createdAt
       groups {
         _id
@@ -162,9 +159,11 @@ export const DELETE_GAME = gql`
       name
       photo
       description
-      castMembers
+      castMembers {
+        _id
+        name
+      }
       numMembers
-      author
       createdAt
       groups {
         _id
@@ -194,6 +193,41 @@ export const LEAVE_GAME = gql`
       joinedGames {
         _id
       }
+    }
+  }
+`;
+
+export const ADD_CAST_MEMBER = gql`
+  mutation addCastMember($name: String!) {
+    addCastMember(name: $name) {
+      _id
+      name
+    }
+  }
+`;
+
+export const UPDATE_CAST_MEMBER = gql`
+  mutation updateCastMember($id: ID!, $name: String!) {
+    updateCastMember(_id: $id, name: $name) {
+      _id
+      name
+    }
+  }
+`;
+
+export const DELETE_CAST_MEMBER = gql`
+  mutation deleteCastMember($id: ID!) {
+    deleteCastMember(_id: $id) {
+      _id
+    }
+  }
+`;
+
+export const ELIMINATED = gql`
+  mutation eliminated($order: Int!) {
+    eliminated(order: $order) {
+      _id
+      order
     }
   }
 `;

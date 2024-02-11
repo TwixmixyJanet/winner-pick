@@ -3,8 +3,8 @@ import { useQuery, useMutation } from "@apollo/client";
 import { useEffect, useRef, useState } from "react";
 import Auth from "../../utils/auth";
 
-import { QUERY_USER } from "../../utils/queries";
-import { ADD_GAME } from "../../utils/mutations";
+import { QUERY_USER, QUERY_ALL_CAST_MEMBERS } from "../../utils/queries";
+import { ADD_GAME, ADD_CAST_MEMBER } from "../../utils/mutations";
 
 import "../../pages/style.css";
 
@@ -44,50 +44,50 @@ export default function GameForm() {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    castMembers: "",
+    castMembers: [],
     numMembers: "",
     groupId: "", // The selected group id
   });
 
   const handleSubmit = async () => {
     try {
-      console.log("formData: ", formData);
-      console.log("myImage: ", myImage);
-      console.log("username: ", username);
       const { name, description, castMembers, numMembers, groupId } = formData;
-      const { data, error } = await addGame({
+      console.log(castMembers);
+      // const castMemberIds = data.addCastMember.map(
+      //   (castMember) => castMember._id
+      // );
+      // Add game
+      const gameResult = await addGame({
         variables: {
           name: name,
           description: description,
-          castMembers: castMembers,
           numMembers: parseInt(numMembers),
           groupId: groupId,
           photo: myImage,
           author: username,
+          castMembers: castMembers,
         },
         refetchQueries: [{ query: QUERY_USER, variables: { username } }],
       });
 
-      //Reset the form after successful submission
+      console.log(gameResult);
+      // const gameId = gameResult.data.addGame._id;
+
+      // Reset form state
       setFormData({
         name: "",
         description: "",
-        castMembers: "",
         numMembers: "",
         groupId: "",
       });
 
       setMyImage("");
 
-      if (data) {
-        window.location.replace(window.location.origin + "/dashboard");
-      }
-
-      if (error) {
-        setuploadError("something went wrong, please try again");
-      }
+      // Redirect or handle success as needed
+      window.location.replace(window.location.origin + "/dashboard");
     } catch (error) {
       console.error("Error submitting game:", error);
+      setuploadError("Something went wrong, please try again");
     }
   };
 
@@ -133,6 +133,41 @@ export default function GameForm() {
     // This is to prevent the page from reloading when someone clicks the button to upload a picture
   };
 
+  const [name, setName] = useState("");
+  const [castMembers, setCastMembers] = useState([]);
+  // Define the ADD_CAST_MEMBER mutation
+  const [addCastMember] = useMutation(ADD_CAST_MEMBER);
+
+  const handleAddCastMember = async () => {
+    try {
+      if (!name.trim()) return;
+
+      // Call the ADD_CAST_MEMBER mutation
+      const { data } = await addCastMember({
+        variables: { name: name },
+      });
+
+      // Update the castMembers state with the newly added cast member
+      if (data && data.addCastMember) {
+        setCastMembers((prevCastMembers) => [
+          ...prevCastMembers,
+          data.addCastMember.name,
+        ]);
+        setFormData({
+          ...formData,
+          castMembers: [...formData.castMembers, data.addCastMember._id],
+        });
+        console.log(formData.castMembers);
+      }
+
+      // Clear the input field after adding cast member
+      setName("");
+    } catch (error) {
+      console.error("Error adding cast member:", error);
+      // Handle error as needed
+    }
+  };
+
   return (
     <form className="mb-5 p-1">
       <div className="col m-auto">
@@ -150,7 +185,6 @@ export default function GameForm() {
             </label>
           </div>
         </div>
-
         <div data-mdb-input-init className="form-outline mb-3">
           <input
             type="text"
@@ -164,7 +198,6 @@ export default function GameForm() {
             Game Description
           </label>
         </div>
-
         <div className="col-5 p-0">
           <div data-mdb-input-init className="form-outline mb-3">
             <input
@@ -181,19 +214,26 @@ export default function GameForm() {
           </div>
         </div>
 
-        <div data-mdb-input-init className="form-outline mb-3">
-          <textarea
-            className="form-control"
-            id="castMembers"
-            rows="4"
-            value={formData.castMembers}
-            onChange={handleInputChange}
-          ></textarea>
-          <label className="form-label" htmlFor="castMembers">
-            Cast Members (Separated by commas)
-          </label>
+        <div className="col-5 p-0">
+          <div data-mdb-input-init className="form-outline mb-3">
+            <div>
+              <input
+                type="text"
+                placeholder="Enter cast member name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <button type="button" onClick={handleAddCastMember}>
+                Add Cast Member
+              </button>
+            </div>
+            <ul>
+              {castMembers.map((castMember, index) => (
+                <li key={index}>{castMember}</li>
+              ))}
+            </ul>
+          </div>
         </div>
-
         <div data-mdb-input-init className="form-outline m-auto row">
           <label className="visually-hidden">Group</label>
           <select
@@ -226,7 +266,6 @@ export default function GameForm() {
             )}
           </select>
         </div>
-
         <div
           data-mdb-input-init
           className="form-outline mt-4 m-auto row"
@@ -250,7 +289,6 @@ export default function GameForm() {
             Upload a picture of your game
           </sub>
         </div>
-
         <button
           data-mdb-ripple-init
           type="button"

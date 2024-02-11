@@ -1,5 +1,5 @@
 const db = require("../config/connection");
-const { User, Group, Game } = require("../models");
+const { User, Group, Game, CastMember, Elimination } = require("../models");
 const cleanDB = require("./cleanDB");
 
 db.once("open", async () => {
@@ -7,6 +7,144 @@ db.once("open", async () => {
     await cleanDB("User", "users");
     await cleanDB("Game", "games");
     await cleanDB("Group", "groups");
+    await cleanDB("CastMember", "castmembers");
+    await cleanDB("Elimination", "eliminations");
+
+    const eliminations = await Elimination.insertMany([
+      {
+        order: 1,
+      },
+      {
+        order: 2,
+      },
+      {
+        order: 3,
+      },
+      {
+        order: 4,
+      },
+      {
+        order: 5,
+      },
+      {
+        order: 6,
+      },
+      {
+        order: 7,
+      },
+      {
+        order: 8,
+      },
+      {
+        order: 9,
+      },
+      {
+        order: 10,
+      },
+      {
+        order: 11,
+      },
+      {
+        order: 12,
+      },
+      {
+        order: 13,
+      },
+      {
+        order: 14,
+      },
+      {
+        order: 15,
+      },
+      {
+        order: 16,
+      },
+      {
+        order: 17,
+      },
+      {
+        order: 18,
+      },
+      {
+        order: 19,
+      },
+      {
+        order: 20,
+      },
+    ]);
+
+    console.log("🔥 eliminations seeded 🔥");
+
+    const castMembers = await CastMember.insertMany([
+      {
+        name: "Ben Katzman",
+      },
+      {
+        name: "Bhanu Gopal",
+      },
+      {
+        name: "Charlie Davis",
+      },
+      {
+        name: "David Jelinsky",
+      },
+      {
+        name: "Hunter McKnight",
+      },
+      {
+        name: "Jem Hu Adams",
+      },
+      {
+        name: "Jessica Chong",
+      },
+      {
+        name: "Kenzie Veurink",
+      },
+      {
+        name: "Liz Wilcox",
+      },
+      {
+        name: "Maria Shrime Gonzalez",
+      },
+      {
+        name: "Moriah Gaynor",
+      },
+      {
+        name: "Quintavius Burdette",
+      },
+      {
+        name: "Randen Montalvo",
+      },
+      {
+        name: "Sodasia Thompson",
+      },
+      {
+        name: "Tevin Davis",
+      },
+      {
+        name: "Tiffany Nicole Ervin",
+      },
+      {
+        name: "Tim Spicer",
+      },
+      {
+        name: "Venus Vafa",
+      },
+      {
+        name: "Phil Keoghan",
+      },
+      {
+        name: "Clayton Echard",
+      },
+      {
+        name: "Michelle Young",
+      },
+      {
+        name: "Rachel Lindsay",
+      },
+    ]);
+
+    console.log("🎭 cast members seeded 🎭");
 
     const groups = await Group.insertMany([
       {
@@ -42,27 +180,26 @@ db.once("open", async () => {
         description:
           "Survivor Season 46 returns to Mamanuca Island, Fiji, with beautiful beaches and clear water.",
         castMembers: [
-          "Ben Katzman",
-          "Bhanu Gopal",
-          "Charlie Davis",
-          "David Jelinsky",
-          "Hunter McKnight",
-          "Jem Hu Adams",
-          "Jessica Chong",
-          "Kenzie Veurink",
-          "Liz Wilcox",
-          "Maria Shrime Gonzalez",
-          "Moriah Gaynor",
-          "Quintavius Burdette",
-          "Randen Montalvo",
-          "Sodasia Thompson",
-          "Tevin Davis",
-          "Tiffany Nicole Ervin",
-          "Tim Spicer",
-          "Venus Vafa",
+          castMembers[0]._id,
+          castMembers[1]._id,
+          castMembers[2]._id,
+          castMembers[3]._id,
+          castMembers[4]._id,
+          castMembers[5]._id,
+          castMembers[6]._id,
+          castMembers[7]._id,
+          castMembers[8]._id,
+          castMembers[9]._id,
+          castMembers[10]._id,
+          castMembers[11]._id,
+          castMembers[12]._id,
+          castMembers[13]._id,
+          castMembers[14]._id,
+          castMembers[15]._id,
+          castMembers[16]._id,
+          castMembers[17]._id,
         ],
         numMembers: 18,
-        author: "B-King",
         groups: [groups[0]._id],
       },
       {
@@ -71,9 +208,8 @@ db.once("open", async () => {
           "https://parade.com/.image/ar_1.91%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cg_faces:center%2Cq_auto:good%2Cw_1200/MjAzMDQ3ODg4NzI3NTgxODc4/the-bachelor-joey-graziadei.jpg",
         description:
           "The Bachelor is an American dating and relationship reality television series that debuted on March 25, 2002, on ABC.",
-        castMembers: ["Clayton Echard"],
+        castMembers: [castMembers[20]._id],
         numMembers: 1,
-        author: "Barbie",
         groups: [groups[1]._id],
       },
       {
@@ -82,9 +218,8 @@ db.once("open", async () => {
           "https://www.etonline.com/sites/default/files/images/2017-04/1280_rachel_lindsay_bachelorette_twitter.jpg",
         description:
           "The Bachelorette is an American reality television dating game show that debuted on ABC on January 8, 2003.",
-        castMembers: ["Michelle Young"],
+        castMembers: [castMembers[21]._id],
         numMembers: 1,
-        author: "Superman",
         groups: [groups[2]._id],
       },
       {
@@ -93,9 +228,8 @@ db.once("open", async () => {
           "https://wwwimage-tve.cbsstatic.com/base/files/seo/ar_us_s35_social_1200x627_5.jpg",
         description:
           "The Amazing Race is back for its 33rd season! This season, 11 teams will embark on a trek around the world.",
-        castMembers: ["Phil Keoghan"],
+        castMembers: [castMembers[19]._id],
         numMembers: 1,
-        author: "KissUncleKay",
         groups: [groups[3]._id],
       },
     ]);
@@ -118,7 +252,7 @@ db.once("open", async () => {
         email: "mkanatalexander@techfriends.dev",
         password: "password02",
         groups: [groups[1]._id],
-        games: [],
+        games: [games[1]._id],
       },
       {
         username: "Barbie",
