@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import Auth from "../../utils/auth";
 
 import { QUERY_USER, QUERY_GAME } from "../../utils/queries";
-import { UPDATE_GAME } from "../../utils/mutations";
+import { UPDATE_GAME, UPDATE_CAST_MEMBER } from "../../utils/mutations";
 
 initMDB({ Input, Ripple });
 
@@ -17,6 +17,7 @@ export default function GameForm() {
   const [userFamlies, setUserGroups] = useState([]);
   const [uploadError, setuploadError] = useState("");
 
+  // This allows for existing game data to be displayed in the form
   const { loading, data, error } = useQuery(QUERY_GAME, {
     variables: { id: gameId },
   });
@@ -48,9 +49,9 @@ export default function GameForm() {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    castMembers: "",
+    castMembers: [],
     numMembers: "",
-    groupId: "", // The selected group id
+    groupId: "",
   });
 
   const handleSubmit = async () => {
@@ -114,11 +115,16 @@ export default function GameForm() {
 
   useEffect(() => {
     if (data && data.game) {
+      const castMembersArray = data.game.castMembers.map((castMember) => ({
+        name: castMember.name,
+        _id: castMember._id,
+      }));
       // Set initial state using data
+
       setFormData({
         name: data.game.name || "",
         description: data.game.description || "",
-        castMembers: data.game.castMembers || "",
+        castMembers: castMembersArray || [],
         numMembers: data.game.numMembers || "",
         groupId: data.game.groups._id || "",
       });
@@ -152,6 +158,41 @@ export default function GameForm() {
       }
     });
   }, []);
+
+  const [name, setName] = useState("");
+  const [castMembers, setCastMembers] = useState([]);
+  // Define the ADD_CAST_MEMBER mutation
+  const [addCastMember] = useMutation(UPDATE_CAST_MEMBER);
+
+  const handleAddCastMember = async () => {
+    try {
+      if (!name.trim()) return;
+
+      // Call the ADD_CAST_MEMBER mutation
+      const { data } = await addCastMember({
+        variables: { name: name },
+      });
+
+      // Update the castMembers state with the newly added cast member
+      if (data && data.addCastMember) {
+        setCastMembers((prevCastMembers) => [
+          ...prevCastMembers,
+          data.addCastMember.name,
+        ]);
+        setFormData({
+          ...formData,
+          castMembers: [...formData.castMembers, data.addCastMember._id],
+        });
+        console.log(formData.castMembers);
+      }
+
+      // Clear the input field after adding cast member
+      setName("");
+    } catch (error) {
+      console.error("Error adding cast member:", error);
+      // Handle error as needed
+    }
+  };
 
   return (
     <form className="mb-5 p-1">
@@ -199,18 +240,26 @@ export default function GameForm() {
           </div>
         </div>
 
-        <div data-mdb-input-init className="form-outline mb-3">
-          <input
-            type="text"
-            id="castMembers"
-            rows="4"
-            className="form-control"
-            value={formData.castMembers}
-            onChange={handleInputChange}
-          />
-          <label className="form-label" htmlFor="castMembers">
-            Cast Members (Separated by commas)
-          </label>
+        <div className="col-5 p-0">
+          <div data-mdb-input-init className="form-outline mb-3">
+            <div>
+              <input
+                type="text"
+                placeholder="Enter cast member name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <button type="button" onClick={handleAddCastMember}>
+                Add Cast Member
+              </button>
+            </div>
+            <ul>
+              {/* Render existing cast members as list items */}
+              {formData.castMembers.map((castMember, index) => (
+                <li key={index}>{castMember.name}</li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         <div data-mdb-input-init className="form-outline m-auto row">

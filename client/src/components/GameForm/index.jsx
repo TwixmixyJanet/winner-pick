@@ -46,7 +46,7 @@ export default function GameForm() {
     description: "",
     castMembers: [],
     numMembers: "",
-    groupId: "", // The selected group id
+    groupId: "",
   });
 
   const handleSubmit = async () => {
