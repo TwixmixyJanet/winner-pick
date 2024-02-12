@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import Auth from "../../utils/auth";
 
 import { QUERY_USER, QUERY_GAME } from "../../utils/queries";
-import { UPDATE_GAME, UPDATE_CAST_MEMBER } from "../../utils/mutations";
+import { UPDATE_GAME, ADD_CAST_MEMBER } from "../../utils/mutations";
 
 initMDB({ Input, Ripple });
 
@@ -74,7 +74,6 @@ export default function GameForm() {
           photo: myImage,
           author: username,
         },
-        // refetchQueries: [{ query: QUERY_GAME, variables: { username } }],
       });
       console.log("data: ", data);
 
@@ -114,7 +113,21 @@ export default function GameForm() {
   }, [userData]);
 
   useEffect(() => {
+    // Initialize MDB UI Kit components after the component has loaded
+    document.querySelectorAll(".form-outline").forEach((formOutline) => {
+      if (formOutline && formOutline.classList) {
+        try {
+          new Input(formOutline).update();
+        } catch (error) {
+          console.error("Error updating Input:", error);
+        }
+      }
+    });
+  }, []);
+
+  useEffect(() => {
     if (data && data.game) {
+      // Pull out the castMembers array from the game object
       const castMembersArray = data.game.castMembers.map((castMember) => ({
         name: castMember.name,
         _id: castMember._id,
@@ -146,23 +159,10 @@ export default function GameForm() {
     // This is to prevent the page from reloading when someone clicks the button to upload a picture
   };
 
-  useEffect(() => {
-    // Initialize MDB UI Kit components after the component has loaded
-    document.querySelectorAll("form-outline").forEach((formOutline) => {
-      if (formOutline && formOutline.classList) {
-        try {
-          new Input(formOutline).update();
-        } catch (error) {
-          console.error("Error updating Input:", error);
-        }
-      }
-    });
-  }, []);
-
   const [name, setName] = useState("");
   const [castMembers, setCastMembers] = useState([]);
   // Define the ADD_CAST_MEMBER mutation
-  const [addCastMember] = useMutation(UPDATE_CAST_MEMBER);
+  const [addCastMember] = useMutation(ADD_CAST_MEMBER);
 
   const handleAddCastMember = async () => {
     try {
@@ -177,11 +177,14 @@ export default function GameForm() {
       if (data && data.addCastMember) {
         setCastMembers((prevCastMembers) => [
           ...prevCastMembers,
-          data.addCastMember.name,
+          { _id: data.addCastMember._id, name: data.addCastMember.name }, // Update to include ID
         ]);
         setFormData({
           ...formData,
-          castMembers: [...formData.castMembers, data.addCastMember._id],
+          castMembers: [
+            ...formData.castMembers,
+            { _id: data.addCastMember._id },
+          ], // Update to include ID
         });
         console.log(formData.castMembers);
       }
@@ -255,9 +258,11 @@ export default function GameForm() {
             </div>
             <ul>
               {/* Render existing cast members as list items */}
-              {formData.castMembers.map((castMember, index) => (
-                <li key={index}>{castMember.name}</li>
-              ))}
+              {formData.castMembers
+                .filter((castMember) => castMember.name !== "")
+                .map((castMember, index) => (
+                  <li key={index}>{castMember.name}</li>
+                ))}
             </ul>
           </div>
         </div>
