@@ -46,17 +46,14 @@ export default function GameForm() {
     description: "",
     castMembers: [],
     numMembers: "",
-    groupId: "", // The selected group id
+    groupId: "",
   });
 
   const handleSubmit = async () => {
     try {
       const { name, description, castMembers, numMembers, groupId } = formData;
       console.log(castMembers);
-      // const castMemberIds = data.addCastMember.map(
-      //   (castMember) => castMember._id
-      // );
-      // Add game
+
       const gameResult = await addGame({
         variables: {
           name: name,
@@ -71,7 +68,6 @@ export default function GameForm() {
       });
 
       console.log(gameResult);
-      // const gameId = gameResult.data.addGame._id;
 
       // Reset form state
       setFormData({

@@ -116,7 +116,7 @@ function GroupGames() {
                     className="btn"
                     data-mdb-ripple-init
                   >
-                    See Game
+                    Play Game
                   </Link>
                 </div>
               </div>

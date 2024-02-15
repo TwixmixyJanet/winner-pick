@@ -218,7 +218,7 @@ const GroupCard = () => {
                       className="btn btn-block m-auto mb-2"
                       data-mdb-ripple-init
                     >
-                      See Games
+                      Play Games
                     </Link>
                   </div>
                   <button
