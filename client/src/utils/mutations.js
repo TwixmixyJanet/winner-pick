@@ -124,7 +124,7 @@ export const UPDATE_GAME = gql`
     $name: String!
     $photo: String!
     $description: String!
-    $castMembers: [String!]
+    $castMembers: [ID!]! # Updated to accept an array of ID values
     $numMembers: Int!
     $groupId: ID
   ) {
@@ -141,7 +141,10 @@ export const UPDATE_GAME = gql`
       name
       photo
       description
-      castMembers
+      castMembers {
+        _id
+        name
+      }
       numMembers
       createdAt
       groups {

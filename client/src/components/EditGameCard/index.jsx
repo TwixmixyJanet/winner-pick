@@ -61,6 +61,7 @@ export default function GameForm() {
       console.log("username: ", username);
       const { name, description, castMembers, numMembers, groupId } = formData;
 
+      const castMemberIds = castMembers.map((castMember) => castMember._id);
       // Use updateGame mutation instead of addGame
       const { data, error } = await updateGame({
         variables: {
@@ -68,8 +69,8 @@ export default function GameForm() {
           id: gameId,
           name: name,
           description: description,
-          castMembers: castMembers,
-          numMembers: parent(numMembers),
+          castMembers: castMemberIds,
+          numMembers: parseInt(numMembers),
           groupId: groupId,
           photo: myImage,
           author: username,
@@ -168,32 +169,20 @@ export default function GameForm() {
     try {
       if (!name.trim()) return;
 
-      // Call the ADD_CAST_MEMBER mutation
       const { data } = await addCastMember({
         variables: { name: name },
       });
 
-      // Update the castMembers state with the newly added cast member
       if (data && data.addCastMember) {
         setCastMembers((prevCastMembers) => [
           ...prevCastMembers,
-          { _id: data.addCastMember._id, name: data.addCastMember.name }, // Update to include ID
+          { _id: data.addCastMember._id, name: data.addCastMember.name },
         ]);
-        setFormData({
-          ...formData,
-          castMembers: [
-            ...formData.castMembers,
-            { _id: data.addCastMember._id },
-          ], // Update to include ID
-        });
-        console.log(formData.castMembers);
       }
 
-      // Clear the input field after adding cast member
       setName("");
     } catch (error) {
       console.error("Error adding cast member:", error);
-      // Handle error as needed
     }
   };
 
