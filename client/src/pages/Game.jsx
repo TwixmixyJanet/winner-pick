@@ -105,7 +105,50 @@ function Game() {
                 id="game-image"
               />
               <div className="card-body">
-                <h1 className="card-title mb-5 mt-3">{game.name}</h1>
+                <h1 className="card-title mt-3">{game.name}</h1>
+                <div className="col m-auto p-1 mb-5">
+                  <div className="d-flex justify-content-center">
+                    <div className="row">
+                      <div className="col m-auto p-1">
+                        <Link to={`/groupgames/${group?._id}`}>
+                          <div className="badge group-badge p-auto m-2">
+                            <i className="fas fa-users fa-lg m-2"></i>
+                            <p className=" m-0">Group: {group?.name || ""}</p>
+                          </div>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    {loggedIn !== false ? (
+                      <>
+                        {joined !== false ? (
+                          <div
+                            className="badge badge-light p-auto"
+                            onClick={leaveHandler}
+                          >
+                            <i
+                              className="fa-solid fa-thumbtack fa-2x p-auto"
+                              style={{ color: "#da6d44" }}
+                            ></i>
+                          </div>
+                        ) : (
+                          <div
+                            className="badge badge-light p-auto"
+                            onClick={joinHandler}
+                          >
+                            <i
+                              className="fa-solid fa-thumbtack fa-2x p-auto"
+                              style={{ color: "#e4b54b" }}
+                            ></i>
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                </div>
                 <div className="card-text mb-5">
                   <div className="row">
                     <div className="col-md-6 mb-1">
@@ -118,26 +161,27 @@ function Game() {
                         {game.castMembers.map((castMember) => (
                           <div className="col-md-6 mb-1" key={castMember._id}>
                             {castMember.name}
-                            <select
-                              className="form-select"
-                              value={selectedUsers[castMember._id] || ""}
-                              onChange={(e) =>
-                                handleUserSelect(castMember._id, e.target.value)
+                            <i
+                              className="fas fa-plus-circle"
+                              style={{ marginLeft: "5px", cursor: "pointer" }}
+                              onClick={() =>
+                                handleUserSelect(
+                                  castMember._id,
+                                  selectedUsers[castMember._id] || ""
+                                )
                               }
-                            >
-                              <option value="">Select User</option>
-                              {groupMemberData && groupMemberData.groupMembers
-                                ? groupMemberData.groupMembers.map((user) => (
-                                    <option key={user._id} value={user._id}>
-                                      {user.username}
-                                    </option>
-                                  ))
-                                : null}
-                            </select>
+                            ></i>
+                            {/* Optionally, display the selected user */}
+                            {selectedUsers[castMember._id] && (
+                              <span style={{ marginLeft: "5px" }}>
+                                Selected user: {selectedUsers[castMember._id]}
+                              </span>
+                            )}
                           </div>
                         ))}
                       </div>
                     ) : null}
+
                     <div className="col-md-6 mt-5 mb-2">
                       <div className="field-title m-0  d-flex text-start">
                         Number of Cast Members:{" "}
@@ -148,51 +192,26 @@ function Game() {
                     </div>
                   </div>
                 </div>
+
                 <div className="d-flex justify-content-center">
                   <div className="row">
                     <div className="col m-auto p-1">
-                      <Link to={`/groupgames/${group?._id}`}>
-                        <div className="badge group-badge p-auto m-2">
-                          <i className="fas fa-users fa-lg m-2"></i>
-                          <p className=" m-0">Group: {group?.name || ""}</p>
-                        </div>
-                      </Link>
-                    </div>
-                    <div className="col m-auto p-1">
                       <div className="badge author-badge p-auto m-2">
                         <i className="fas fa-user fa-lg m-2"></i>
-                        <p className=" m-0">Players: {game.user}</p>
-                      </div>
-                    </div>
-                    <div className="col m-auto p-1">
-                      <div>
-                        {loggedIn !== false ? (
-                          <>
-                            {joined !== false ? (
-                              <div
-                                className="badge badge-light p-auto"
-                                onClick={leaveHandler}
-                              >
-                                <i
-                                  className="fa-solid fa-thumbtack fa-2x p-auto"
-                                  style={{ color: "#da6d44" }}
-                                ></i>
+                        <p className="m-0">Players:</p>
+                        <div className="d-flex flex-column">
+                          {groupMemberData &&
+                            groupMemberData.groupMembers.map((user) => (
+                              <div key={user._id}>
+                                <h6>{user.username}</h6>
+                                {/* Optionally, display additional user information */}
+                                <p>
+                                  {user.firstName} {user.lastName}
+                                </p>
+                                <p> {user._id}</p>
                               </div>
-                            ) : (
-                              <div
-                                className="badge badge-light p-auto"
-                                onClick={joinHandler}
-                              >
-                                <i
-                                  className="fa-solid fa-thumbtack fa-2x p-auto"
-                                  style={{ color: "#e4b54b" }}
-                                ></i>
-                              </div>
-                            )}
-                          </>
-                        ) : (
-                          <></>
-                        )}
+                            ))}
+                        </div>
                       </div>
                     </div>
                   </div>
