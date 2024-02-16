@@ -2,7 +2,7 @@
 
 Because it only counts if you pick the winner.
 
-The goal of this app is to pick the winner of a series of a reality TV show. The MVP will be to have teams draft their players and for their player to be one of the winners for all the bragging rights.
+The goal of this app is to pick the winner of a series on a reality TV show. The MVP will be to have teams draft their players and for their player to be one of the winners for all the bragging rights.
 
 For example, it will be based off of the reality TV show, Survivor.
 
@@ -19,8 +19,10 @@ For example, it will be based off of the reality TV show, Survivor.
 | VSCode | https://code.visualstudio.com/ |
 | Cloudinary | https://cloudinary.com/ |
 | Heroku | https://www.heroku.com/ |
+| MongoDB | https://www.mongodb.com/ |
+| Mongoose | https://www.npmjs.com/package/mongoose |
 | GraphQL | https://graphql.org/ |
-| Apollo | https://www.apollographql.com/ |
+| Apollo Server | https://www.apollographql.com/ |
 | React | https://react.dev/ |
 | Vite | https://vitejs.dev/ |
 
@@ -74,8 +76,8 @@ Data Structure:
   - many cast members to one group
   - one cast member to one user
   - many cast members to many episodes
-- Episodes
-  - many episodes to many cast members
+- Eliminations
+  - many eliminations to many cast members
 
 <br />
 
