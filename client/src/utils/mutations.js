@@ -234,3 +234,32 @@ export const ELIMINATED = gql`
     }
   }
 `;
+
+export const ADD_CAST_MEMBER_TO_USER_ROSTER = gql`
+  mutation addCastMemberToUserRoster($userId: ID!, $castMember: String!) {
+    addCastMemberToUserRoster(userId: $userId, castMember: $castMember) {
+      _id
+      username
+      roster {
+        _id
+        name
+      }
+    }
+  }
+`;
+
+export const REMOVE_CAST_MEMBER_FROM_USER_ROSTER = gql`
+  mutation removeCastMemberFromUserRoster($userId: ID!, $castMemberId: ID!) {
+    removeCastMemberFromUserRoster(
+      userId: $userId
+      castMemberId: $castMemberId
+    ) {
+      _id
+      username
+      roster {
+        _id
+        name
+      }
+    }
+  }
+`;

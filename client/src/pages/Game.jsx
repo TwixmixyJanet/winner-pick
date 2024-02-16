@@ -4,7 +4,12 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 
 import { QUERY_GAME, QUERY_USER, QUERY_GROUP_MEMBER } from "../utils/queries";
-import { JOIN_GAME, LEAVE_GAME } from "../utils/mutations";
+import {
+  JOIN_GAME,
+  LEAVE_GAME,
+  ADD_CAST_MEMBER_TO_USER_ROSTER,
+  REMOVE_CAST_MEMBER_FROM_USER_ROSTER,
+} from "../utils/mutations";
 import "./style.css";
 import Auth from "../utils/auth";
 
@@ -20,6 +25,13 @@ function Game() {
 
   const [joinGame] = useMutation(JOIN_GAME);
   const [leaveGame] = useMutation(LEAVE_GAME);
+  const [roster, setRoster] = useState([]);
+  const [addCastMemberToUserRoster] = useMutation(
+    ADD_CAST_MEMBER_TO_USER_ROSTER
+  );
+  const [removeCastMemberToUserRoster] = useMutation(
+    REMOVE_CAST_MEMBER_FROM_USER_ROSTER
+  );
 
   const { loading, data, error } = useQuery(QUERY_GAME, {
     variables: { id: gameId },
@@ -92,6 +104,21 @@ function Game() {
     setSelectedUsers({ ...selectedUsers, [castMemberId]: userId });
   };
 
+  const addCastMemberHandler = async (castMember) => {
+    try {
+      const { data } = await addCastMemberToUserRoster({
+        variables: {
+          userId: Auth.getProfile().authenticatedPerson._id,
+          castMemberId: castMember._id, // Assuming castMember._id exists
+        },
+      });
+      // Update the roster with the added cast member
+      setRoster([...roster, data.addCastMemberToUserRoster.castMember]);
+    } catch (error) {
+      console.error("Error adding cast member to user roster:", error);
+    }
+  };
+
   return (
     <>
       {game ? (
@@ -157,20 +184,16 @@ function Game() {
                     </div>
                     {game.castMembers ? (
                       <div className="row">
-                        <div className="field-title m-0">Cast Member:</div>{" "}
+                        <div className="field-title m-0">Cast Members:</div>{" "}
                         {game.castMembers.map((castMember) => (
                           <div className="col-md-6 mb-1" key={castMember._id}>
                             {castMember.name}
                             <i
                               className="fas fa-plus-circle"
                               style={{ marginLeft: "5px", cursor: "pointer" }}
-                              onClick={() =>
-                                handleUserSelect(
-                                  castMember._id,
-                                  selectedUsers[castMember._id] || ""
-                                )
-                              }
+                              onClick={() => addCastMemberHandler(castMember)}
                             ></i>
+
                             {/* Optionally, display the selected user */}
                             {selectedUsers[castMember._id] && (
                               <span style={{ marginLeft: "5px" }}>
@@ -213,6 +236,13 @@ function Game() {
                             ))}
                         </div>
                       </div>
+                      {/* Display roster */}
+                      <div>Roster:</div>
+                      <ul>
+                        {roster.map((castMember, index) => (
+                          <li key={index}>{castMember}</li>
+                        ))}
+                      </ul>
                     </div>
                   </div>
                 </div>

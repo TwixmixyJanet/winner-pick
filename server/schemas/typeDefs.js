@@ -82,6 +82,8 @@ const typeDefs = `
     updateCastMember(_id: ID!, name: String): CastMember
     deleteCastMember(_id: ID!): CastMember
     eliminated(_id: ID!): CastMember
+    addCastMemberToUserRoster(userId: ID!, castMember: String!): User
+    removeCastMemberFromUserRoster(userId: ID!, castMemberId: ID!): User
   }
 `;
 

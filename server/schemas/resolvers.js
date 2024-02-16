@@ -248,6 +248,39 @@ const resolvers = {
 
       throw new AuthenticationError("You need to be logged in!");
     },
+    addCastMemberToUserRoster: async (_, { userId, castMember }) => {
+      try {
+        const user = await User.findById(userId);
+        if (!user) {
+          throw new Error("User not found");
+        }
+
+        // Add the cast member to the user's roster
+        user.roster.push(castMember);
+        await user.save();
+
+        return user;
+      } catch (error) {
+        throw new Error("Failed to add cast member to user's roster");
+      }
+    },
+
+    removeCastMemberFromUserRoster: async (_, { userId, castMemberId }) => {
+      try {
+        const user = await User.findById(userId);
+        if (!user) {
+          throw new Error("User not found");
+        }
+
+        // Remove the cast member from the user's roster
+        user.roster = user.roster.filter((item) => item !== castMemberId);
+        await user.save();
+
+        return user;
+      } catch (error) {
+        throw new Error("Failed to remove cast member from user's roster");
+      }
+    },
   },
 };
 
