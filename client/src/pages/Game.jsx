@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 
-import { QUERY_GAME, QUERY_USER } from "../utils/queries";
+import { QUERY_GAME, QUERY_USER, QUERY_GROUP_MEMBER } from "../utils/queries";
 import { JOIN_GAME, LEAVE_GAME } from "../utils/mutations";
 import "./style.css";
 import Auth from "../utils/auth";
@@ -14,6 +14,7 @@ function Game() {
 
   const [game, setGame] = useState({});
   const [group, setGroup] = useState({});
+  const [selectedUsers, setSelectedUsers] = useState({});
   const loggedIn = Auth.loggedIn();
   const [joined, setJoined] = useState(false);
 
@@ -22,6 +23,15 @@ function Game() {
 
   const { loading, data, error } = useQuery(QUERY_GAME, {
     variables: { id: gameId },
+  });
+
+  const {
+    loading: groupMemberLoading,
+    data: groupMemberData,
+    error: groupMemberError,
+  } = useQuery(QUERY_GROUP_MEMBER, {
+    variables: { groupId: group._id }, // Assuming group._id is available
+    skip: !group._id, // Skip the query if group._id is not available
   });
 
   useEffect(() => {
@@ -78,6 +88,10 @@ function Game() {
     setJoined(false);
   };
 
+  const handleUserSelect = (castMemberId, userId) => {
+    setSelectedUsers({ ...selectedUsers, [castMemberId]: userId });
+  };
+
   return (
     <>
       {game ? (
@@ -99,11 +113,27 @@ function Game() {
                       {game.description}
                     </div>
                     {game.castMembers ? (
-                      <div className="col-md-6 mb-1">
-                        <div className="field-title m-0">Cast Members:</div>{" "}
+                      <div className="row">
+                        <div className="field-title m-0">Cast Member:</div>{" "}
                         {game.castMembers.map((castMember) => (
-                          <div key={castMember._id}>
-                            <p>{castMember.name}</p>
+                          <div className="col-md-6 mb-1" key={castMember._id}>
+                            {castMember.name}
+                            <select
+                              className="form-select"
+                              value={selectedUsers[castMember._id] || ""}
+                              onChange={(e) =>
+                                handleUserSelect(castMember._id, e.target.value)
+                              }
+                            >
+                              <option value="">Select User</option>
+                              {groupMemberData && groupMemberData.groupMembers
+                                ? groupMemberData.groupMembers.map((user) => (
+                                    <option key={user._id} value={user._id}>
+                                      {user.username}
+                                    </option>
+                                  ))
+                                : null}
+                            </select>
                           </div>
                         ))}
                       </div>
@@ -131,7 +161,7 @@ function Game() {
                     <div className="col m-auto p-1">
                       <div className="badge author-badge p-auto m-2">
                         <i className="fas fa-user fa-lg m-2"></i>
-                        <p className=" m-0">Author: {game.user}</p>
+                        <p className=" m-0">Players: {game.user}</p>
                       </div>
                     </div>
                     <div className="col m-auto p-1">

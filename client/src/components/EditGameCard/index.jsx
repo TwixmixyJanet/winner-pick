@@ -133,15 +133,16 @@ export default function GameForm() {
         name: castMember.name,
         _id: castMember._id,
       }));
-      // Set initial state using data
 
-      setFormData({
+      // Set initial state using data
+      setFormData((prevFormData) => ({
+        ...prevFormData,
         name: data.game.name || "",
         description: data.game.description || "",
         castMembers: castMembersArray || [],
         numMembers: data.game.numMembers || "",
         groupId: data.game.groups._id || "",
-      });
+      }));
 
       setMyImage(data.game.photo || ""); // Set image if available
     }
@@ -174,13 +175,16 @@ export default function GameForm() {
       });
 
       if (data && data.addCastMember) {
-        setCastMembers((prevCastMembers) => [
-          ...prevCastMembers,
-          { _id: data.addCastMember._id, name: data.addCastMember.name },
-        ]);
+        // Update the castMembers state with the new cast member
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          castMembers: [
+            ...prevFormData.castMembers,
+            { _id: data.addCastMember._id, name: data.addCastMember.name },
+          ],
+        }));
+        setName(""); // Clear the input field after adding the cast member
       }
-
-      setName("");
     } catch (error) {
       console.error("Error adding cast member:", error);
     }
