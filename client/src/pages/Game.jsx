@@ -109,11 +109,11 @@ function Game() {
       const { data } = await addCastMemberToUserRoster({
         variables: {
           userId: Auth.getProfile().authenticatedPerson._id,
-          castMemberId: castMember._id, // Assuming castMember._id exists
+          castMember: castMember.name, // Assuming castMember.name is the correct value to be passed
         },
       });
       // Update the roster with the added cast member
-      setRoster([...roster, data.addCastMemberToUserRoster.castMember]);
+      setRoster([...roster, data.addCastMemberToUserRoster]);
     } catch (error) {
       console.error("Error adding cast member to user roster:", error);
     }
@@ -182,6 +182,8 @@ function Game() {
                       <div className="field-title m-0">Description:</div>{" "}
                       {game.description}
                     </div>
+
+                    {/* CAST MEMBERS */}
                     {game.castMembers ? (
                       <div className="row">
                         <div className="field-title m-0">Cast Members:</div>{" "}
@@ -191,7 +193,7 @@ function Game() {
                             <i
                               className="fas fa-plus-circle"
                               style={{ marginLeft: "5px", cursor: "pointer" }}
-                              onClick={() => addCastMemberHandler(castMember)}
+                              onClick={() => addCastMemberHandler(castMember)} // Pass the castMember object
                             ></i>
 
                             {/* Optionally, display the selected user */}
@@ -240,7 +242,11 @@ function Game() {
                       <div>Roster:</div>
                       <ul>
                         {roster.map((castMember, index) => (
-                          <li key={index}>{castMember}</li>
+                          <li key={index}>
+                            {castMember && castMember.name
+                              ? castMember.name
+                              : "Unknown"}
+                          </li>
                         ))}
                       </ul>
                     </div>

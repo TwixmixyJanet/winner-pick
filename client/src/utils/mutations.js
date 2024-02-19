@@ -240,10 +240,6 @@ export const ADD_CAST_MEMBER_TO_USER_ROSTER = gql`
     addCastMemberToUserRoster(userId: $userId, castMember: $castMember) {
       _id
       username
-      roster {
-        _id
-        name
-      }
     }
   }
 `;
@@ -256,10 +252,6 @@ export const REMOVE_CAST_MEMBER_FROM_USER_ROSTER = gql`
     ) {
       _id
       username
-      roster {
-        _id
-        name
-      }
     }
   }
 `;

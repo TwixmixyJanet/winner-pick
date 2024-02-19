@@ -248,20 +248,22 @@ const resolvers = {
 
       throw new AuthenticationError("You need to be logged in!");
     },
-    addCastMemberToUserRoster: async (_, { userId, castMember }) => {
+
+    addCastMemberToUserRoster: async (_, { userId, castMemberId }) => {
       try {
         const user = await User.findById(userId);
         if (!user) {
           throw new Error("User not found");
         }
 
-        // Add the cast member to the user's roster
-        user.roster.push(castMember);
+        // Assuming castMemberId is the ID of the cast member you want to associate with the user
+        user.castMember = castMemberId; // Assuming you have a field named "castMember" in your User schema
+
         await user.save();
 
         return user;
       } catch (error) {
-        throw new Error("Failed to add cast member to user's roster");
+        throw new Error("Failed to add cast member to user");
       }
     },
 
@@ -272,13 +274,15 @@ const resolvers = {
           throw new Error("User not found");
         }
 
-        // Remove the cast member from the user's roster
-        user.roster = user.roster.filter((item) => item !== castMemberId);
-        await user.save();
+        // Remove the cast member association from the user
+        if (user.castMember && user.castMember.toString() === castMemberId) {
+          user.castMember = null; // Assuming castMember is a single association
+          await user.save();
+        }
 
         return user;
       } catch (error) {
-        throw new Error("Failed to remove cast member from user's roster");
+        throw new Error("Failed to remove cast member from user");
       }
     },
   },
