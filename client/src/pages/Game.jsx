@@ -209,19 +209,34 @@ function Game() {
                     )}
                   </div>
                 </div>
+                {/* GAME DETAILS */}
                 <div className="card-text mb-5">
                   <div className="row">
+                    {/* Description */}
                     <div className="col-md-6 mb-1">
                       <div className="field-title m-0">Description:</div>{" "}
                       {game.description}
                     </div>
+                    {/* Number of Cast Members */}
+                    <div className="col-md-6 mb-2">
+                      <div className="field-title m-0 d-flex text-start">
+                        Number of Cast Members:{" "}
+                      </div>
+                      <div className="textwrap d-flex text-start">
+                        {game.numMembers}
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-                    {/* CAST MEMBERS */}
+                <div className="row">
+                  {/* Cast Members */}
+                  <div className="col-md-6 mb-1">
                     {game.castMembers ? (
-                      <div className="row">
+                      <div>
                         <h3 className="field-title m-0">Cast Members:</h3>{" "}
                         {game.castMembers.map((castMember) => (
-                          <div className="col-md-6 mb-1" key={castMember._id}>
+                          <div key={castMember._id}>
                             {castMember.name}
                             <i
                               className="fas fa-plus-circle"
@@ -243,53 +258,48 @@ function Game() {
                         ))}
                       </div>
                     ) : null}
+                  </div>
+                  {/* Cast Members End */}
 
-                    <div className="col-md-6 mt-5 mb-2">
-                      <div className="field-title m-0  d-flex text-start">
-                        Number of Cast Members:{" "}
-                      </div>
-                      <div className="textwrap d-flex text-start">
-                        {game.numMembers}
+                  {/* User Rosters */}
+                  <div className="col-md-6">
+                    <div className="d-flex justify-content-center flex-column align-items-center">
+                      <h3 className="field-title m-0">Players</h3>
+                      <div className="row row-cols-auto">
+                        {groupMemberData &&
+                          groupMemberData.groupMembers.map((user) => (
+                            <div className="col" key={user._id}>
+                              <div className="badge author-badge p-auto m-2">
+                                <i className="fas fa-user fa-lg m-2"></i>
+                                <div className="d-flex flex-column">
+                                  <h6>{user.username}</h6>
+                                  {/* Optionally, display additional user information */}
+                                  <p>
+                                    {user.firstName} {user.lastName}
+                                  </p>
+                                  {/* Rosters */}
+                                  <div>Roster:</div>
+                                  <ul>
+                                    {user.roster &&
+                                      user.roster
+                                        .filter((castMember) => {
+                                          // Check if the cast member is not drafted
+                                          return !draftedCastMemberIds.includes(
+                                            castMember._id
+                                          );
+                                        })
+                                        .map((castMember, index) => (
+                                          <li key={index}>{castMember.name}</li>
+                                        ))}
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
                       </div>
                     </div>
                   </div>
-                </div>
-
-                {/* PLAYERS */}
-                <div className="d-flex justify-content-center flex-column align-items-center">
-                  <h3 className="field-title m-0">Players</h3>
-                  <div className="row row-cols-auto">
-                    {groupMemberData &&
-                      groupMemberData.groupMembers.map((user) => (
-                        <div className="col" key={user._id}>
-                          <div className="badge author-badge p-auto m-2">
-                            <i className="fas fa-user fa-lg m-2"></i>
-                            <div className="d-flex flex-column">
-                              <h6>{user.username}</h6>
-                              {/* Optionally, display additional user information */}
-                              <p>
-                                {user.firstName} {user.lastName}
-                              </p>
-                              {/* ROSTERS?? */}
-                              <div>Roster:</div>
-                              <ul>
-                                {user.roster &&
-                                  user.roster
-                                    .filter((castMember) => {
-                                      // Check if the cast member is not drafted
-                                      return !draftedCastMemberIds.includes(
-                                        castMember._id
-                                      );
-                                    })
-                                    .map((castMember, index) => (
-                                      <li key={index}>{castMember.name}</li>
-                                    ))}
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                  </div>
+                  {/* User Rosters End */}
                 </div>
               </div>
             </div>
