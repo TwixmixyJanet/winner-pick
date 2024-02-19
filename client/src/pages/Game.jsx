@@ -113,7 +113,7 @@ function Game() {
         },
       });
       // Update the roster with the added cast member
-      setRoster([...roster, data.addCastMemberToUserRoster]);
+      setRoster([...roster, castMember.name]);
     } catch (error) {
       console.error("Error adding cast member to user roster:", error);
     }
@@ -218,38 +218,32 @@ function Game() {
                   </div>
                 </div>
 
-                <div className="d-flex justify-content-center">
-                  <div className="row">
-                    <div className="col m-auto p-1">
-                      <div className="badge author-badge p-auto m-2">
-                        <i className="fas fa-user fa-lg m-2"></i>
-                        <p className="m-0">Players:</p>
-                        <div className="d-flex flex-column">
-                          {groupMemberData &&
-                            groupMemberData.groupMembers.map((user) => (
-                              <div key={user._id}>
-                                <h6>{user.username}</h6>
-                                {/* Optionally, display additional user information */}
-                                <p>
-                                  {user.firstName} {user.lastName}
-                                </p>
-                                <p> {user._id}</p>
-                              </div>
-                            ))}
+                {/* PLAYERS */}
+                <div className="d-flex justify-content-center flex-column align-items-center">
+                  <h3 className="mb-3">Players</h3>
+                  <div className="row row-cols-auto">
+                    {groupMemberData &&
+                      groupMemberData.groupMembers.map((user) => (
+                        <div className="col" key={user._id}>
+                          <div className="badge author-badge p-auto m-2">
+                            <i className="fas fa-user fa-lg m-2"></i>
+                            <div className="d-flex flex-column">
+                              <h6>{user.username}</h6>
+                              {/* Optionally, display additional user information */}
+                              <p>
+                                {user.firstName} {user.lastName}
+                              </p>
+                              {/* ROSTERS?? */}
+                              <div>Roster:</div>
+                              <ul>
+                                {roster.map((castMember, index) => (
+                                  <li key={index}>{castMember}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                      {/* Display roster */}
-                      <div>Roster:</div>
-                      <ul>
-                        {roster.map((castMember, index) => (
-                          <li key={index}>
-                            {castMember && castMember.name
-                              ? castMember.name
-                              : "Unknown"}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                      ))}
                   </div>
                 </div>
               </div>
