@@ -3,12 +3,17 @@ import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 
-import { QUERY_GAME, QUERY_USER, QUERY_GROUP_MEMBER } from "../utils/queries";
+import {
+  QUERY_GAME,
+  QUERY_USER,
+  QUERY_GROUP_MEMBER,
+  GET_DRAFTED_CAST_MEMBERS,
+} from "../utils/queries";
 import {
   JOIN_GAME,
   LEAVE_GAME,
-  ADD_CAST_MEMBER_TO_USER_ROSTER,
-  REMOVE_CAST_MEMBER_FROM_USER_ROSTER,
+  DRAFT_CAST_MEMBER,
+  UNDRAFT_CAST_MEMBER,
 } from "../utils/mutations";
 import "./style.css";
 import Auth from "../utils/auth";
@@ -16,26 +21,23 @@ import Auth from "../utils/auth";
 function Game() {
   const { id: gameId } = useParams();
   const navigate = useNavigate();
+  const loggedIn = Auth.loggedIn();
 
   const [game, setGame] = useState({});
   const [group, setGroup] = useState({});
   const [selectedUsers, setSelectedUsers] = useState({});
-  const loggedIn = Auth.loggedIn();
   const [joined, setJoined] = useState(false);
+  const [draftedCastMemberIds, setDraftedCastMemberIds] = useState([]);
 
   const [joinGame] = useMutation(JOIN_GAME);
   const [leaveGame] = useMutation(LEAVE_GAME);
-  const [roster, setRoster] = useState([]);
-  const [addCastMemberToUserRoster] = useMutation(
-    ADD_CAST_MEMBER_TO_USER_ROSTER
-  );
-  const [removeCastMemberToUserRoster] = useMutation(
-    REMOVE_CAST_MEMBER_FROM_USER_ROSTER
-  );
 
   const { loading, data, error } = useQuery(QUERY_GAME, {
     variables: { id: gameId },
   });
+  const { loading: draftedLoading, data: draftedData } = useQuery(
+    GET_DRAFTED_CAST_MEMBERS
+  );
 
   const {
     loading: groupMemberLoading,
@@ -57,6 +59,28 @@ function Game() {
       setGroup(data.game.groups);
     }
   }, [data, loading, error]);
+
+  // ROSTER DRAFTING
+  useEffect(() => {
+    if (
+      draftedData &&
+      draftedData.user &&
+      draftedData.user.draftedCastMembers
+    ) {
+      const draftedCastMembers = draftedData.user.draftedCastMembers;
+      // Extract IDs of drafted cast members
+      const draftedIds = draftedCastMembers.map((castMember) => castMember._id);
+      setDraftedCastMemberIds(draftedIds);
+
+      const updatedGroupMembers = groupMemberData.groupMembers.map((user) => {
+        const updatedRoster = user.roster.filter(
+          (castMember) => !draftedIds.includes(castMember._id)
+        );
+        return { ...user, roster: updatedRoster };
+      });
+      setGroup(updatedGroupMembers);
+    }
+  }, [draftedData, groupMemberData]);
 
   const handleReturnToGames = () => {
     // Use the navigate function to navigate back
@@ -104,19 +128,28 @@ function Game() {
     setSelectedUsers({ ...selectedUsers, [castMemberId]: userId });
   };
 
-  const addCastMemberHandler = async (castMember) => {
-    try {
-      const { data } = await addCastMemberToUserRoster({
-        variables: {
-          userId: Auth.getProfile().authenticatedPerson._id,
-          castMemberId: castMember._id, // Assuming castMember._id exists
-        },
+  const [draftCastMember] = useMutation(DRAFT_CAST_MEMBER);
+  const DraftCastMemberButton = ({ castMemberId }) => {
+    const handleDraft = () => {
+      draftCastMember({
+        variables: { castMemberId },
+        // You can include more options here, like refetchQueries, onError, etc.
       });
-      // Update the roster with the added cast member
-      setRoster([...roster, data.addCastMemberToUserRoster.castMember]);
-    } catch (error) {
-      console.error("Error adding cast member to user roster:", error);
-    }
+    };
+
+    return <button onClick={handleDraft}>Draft</button>;
+  };
+
+  const [undraftCastMember] = useMutation(UNDRAFT_CAST_MEMBER);
+  const UndraftCastMemberButton = ({ castMemberId }) => {
+    const handleUndraft = () => {
+      undraftCastMember({
+        variables: { castMemberId },
+        // You can include more options here, like refetchQueries, onError, etc.
+      });
+    };
+
+    return <button onClick={handleUndraft}>Undraft</button>;
   };
 
   return (
@@ -176,22 +209,43 @@ function Game() {
                     )}
                   </div>
                 </div>
+                {/* GAME DETAILS */}
                 <div className="card-text mb-5">
                   <div className="row">
+                    {/* Description */}
                     <div className="col-md-6 mb-1">
                       <div className="field-title m-0">Description:</div>{" "}
                       {game.description}
                     </div>
+                    {/* Number of Cast Members */}
+                    <div className="col-md-6 mb-2">
+                      <div className="field-title m-0 d-flex text-start">
+                        Number of Cast Members:{" "}
+                      </div>
+                      <div className="textwrap d-flex text-start">
+                        {game.numMembers}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="row">
+                  {/* Cast Members */}
+                  <div className="col-md-6 mb-1">
                     {game.castMembers ? (
-                      <div className="row">
-                        <div className="field-title m-0">Cast Members:</div>{" "}
+                      <div>
+                        <h3 className="field-title m-0">Cast Members:</h3>{" "}
                         {game.castMembers.map((castMember) => (
-                          <div className="col-md-6 mb-1" key={castMember._id}>
+                          <div key={castMember._id}>
                             {castMember.name}
                             <i
                               className="fas fa-plus-circle"
                               style={{ marginLeft: "5px", cursor: "pointer" }}
-                              onClick={() => addCastMemberHandler(castMember)}
+                              onClick={() =>
+                                draftCastMember({
+                                  variables: { castMemberId: castMember._id },
+                                })
+                              }
                             ></i>
 
                             {/* Optionally, display the selected user */}
@@ -204,47 +258,48 @@ function Game() {
                         ))}
                       </div>
                     ) : null}
-
-                    <div className="col-md-6 mt-5 mb-2">
-                      <div className="field-title m-0  d-flex text-start">
-                        Number of Cast Members:{" "}
-                      </div>
-                      <div className="textwrap d-flex text-start">
-                        {game.numMembers}
-                      </div>
-                    </div>
                   </div>
-                </div>
+                  {/* Cast Members End */}
 
-                <div className="d-flex justify-content-center">
-                  <div className="row">
-                    <div className="col m-auto p-1">
-                      <div className="badge author-badge p-auto m-2">
-                        <i className="fas fa-user fa-lg m-2"></i>
-                        <p className="m-0">Players:</p>
-                        <div className="d-flex flex-column">
-                          {groupMemberData &&
-                            groupMemberData.groupMembers.map((user) => (
-                              <div key={user._id}>
-                                <h6>{user.username}</h6>
-                                {/* Optionally, display additional user information */}
-                                <p>
-                                  {user.firstName} {user.lastName}
-                                </p>
-                                <p> {user._id}</p>
+                  {/* User Rosters */}
+                  <div className="col-md-6">
+                    <div className="d-flex justify-content-center flex-column align-items-center">
+                      <h3 className="field-title m-0">Players</h3>
+                      <div className="row row-cols-auto">
+                        {groupMemberData &&
+                          groupMemberData.groupMembers.map((user) => (
+                            <div className="col" key={user._id}>
+                              <div className="badge author-badge p-auto m-2">
+                                <i className="fas fa-user fa-lg m-2"></i>
+                                <div className="d-flex flex-column">
+                                  <h6>{user.username}</h6>
+                                  {/* Optionally, display additional user information */}
+                                  <p>
+                                    {user.firstName} {user.lastName}
+                                  </p>
+                                  {/* Rosters */}
+                                  <div>Roster:</div>
+                                  <ul>
+                                    {user.roster &&
+                                      user.roster
+                                        .filter((castMember) => {
+                                          // Check if the cast member is not drafted
+                                          return !draftedCastMemberIds.includes(
+                                            castMember._id
+                                          );
+                                        })
+                                        .map((castMember, index) => (
+                                          <li key={index}>{castMember.name}</li>
+                                        ))}
+                                  </ul>
+                                </div>
                               </div>
-                            ))}
-                        </div>
+                            </div>
+                          ))}
                       </div>
-                      {/* Display roster */}
-                      <div>Roster:</div>
-                      <ul>
-                        {roster.map((castMember, index) => (
-                          <li key={index}>{castMember}</li>
-                        ))}
-                      </ul>
                     </div>
                   </div>
+                  {/* User Rosters End */}
                 </div>
               </div>
             </div>

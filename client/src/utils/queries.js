@@ -153,3 +153,15 @@ export const QUERY_ALL_ELIMINATIONS = gql`
     }
   }
 `;
+
+export const GET_DRAFTED_CAST_MEMBERS = gql`
+  query GetDraftedCastMembers {
+    user {
+      draftedCastMembers {
+        _id
+        name
+        # Include any other fields you may need for drafted cast members
+      }
+    }
+  }
+`;

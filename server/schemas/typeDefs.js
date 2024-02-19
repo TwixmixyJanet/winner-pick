@@ -25,7 +25,8 @@ const typeDefs = `
     groups: [Group]
     games: [Game]
     joinedGames: [Game]
-  }
+    draftedCastMembers: [CastMember] 
+   }
 
   type CastMember {
     _id: ID
@@ -82,8 +83,8 @@ const typeDefs = `
     updateCastMember(_id: ID!, name: String): CastMember
     deleteCastMember(_id: ID!): CastMember
     eliminated(_id: ID!): CastMember
-    addCastMemberToUserRoster(userId: ID!, castMember: String!): User
-    removeCastMemberFromUserRoster(userId: ID!, castMemberId: ID!): User
+    draftCastMember(castMemberId: ID!): CastMember
+    undraftCastMember(castMemberId: ID!): CastMember
   }
 `;
 
