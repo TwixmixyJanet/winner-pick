@@ -235,23 +235,22 @@ export const ELIMINATED = gql`
   }
 `;
 
-export const ADD_CAST_MEMBER_TO_USER_ROSTER = gql`
-  mutation addCastMemberToUserRoster($userId: ID!, $castMember: String!) {
-    addCastMemberToUserRoster(userId: $userId, castMember: $castMember) {
+export const DRAFT_CAST_MEMBER = gql`
+  mutation DraftCastMember($castMemberId: ID!) {
+    draftCastMember(castMemberId: $castMemberId) {
       _id
-      username
+      name
+      # Include any other fields you may need after drafting a cast member
     }
   }
 `;
 
-export const REMOVE_CAST_MEMBER_FROM_USER_ROSTER = gql`
-  mutation removeCastMemberFromUserRoster($userId: ID!, $castMemberId: ID!) {
-    removeCastMemberFromUserRoster(
-      userId: $userId
-      castMemberId: $castMemberId
-    ) {
+export const UNDRAFT_CAST_MEMBER = gql`
+  mutation undraftCastMember($castMemberId: ID!) {
+    undraftCastMember(castMemberId: $castMemberId) {
       _id
-      username
+      name
+      # Include any other fields you may need after undrafting a cast member
     }
   }
 `;
