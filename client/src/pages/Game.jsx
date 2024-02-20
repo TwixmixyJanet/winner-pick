@@ -239,7 +239,7 @@ function Game() {
                           <div key={castMember._id}>
                             {castMember.name}
                             <i
-                              className="fas fa-plus-circle"
+                              className="fas fa-plus-circle plusbutton"
                               style={{ marginLeft: "5px", cursor: "pointer" }}
                               onClick={() =>
                                 draftCastMember({
@@ -288,9 +288,17 @@ function Game() {
                                             castMember._id
                                           );
                                         })
-                                        .map((castMember, index) => (
-                                          <li key={index}>{castMember.name}</li>
-                                        ))}
+                                        .map((castMember, index) => {
+                                          console.log(
+                                            "Rendering cast member:",
+                                            castMember
+                                          );
+                                          return (
+                                            <li key={index}>
+                                              {castMember.name}
+                                            </li>
+                                          );
+                                        })}
                                   </ul>
                                 </div>
                               </div>
