@@ -71,6 +71,14 @@ function Game() {
       const draftedIds = draftedCastMembers.map((castMember) => castMember._id);
       setDraftedCastMemberIds(draftedIds);
 
+      // Get the username from the authenticated user's profile
+      const username = Auth.getProfile().authenticatedPerson.username;
+
+      // Call the QUERY_GROUP_MEMBER with the username variable
+      getUser({
+        variables: { groupId: group._id, username }, // Pass groupId and username variables
+      });
+
       const updatedGroupMembers = groupMemberData.groupMembers.map((user) => {
         const updatedRoster = user.roster.filter(
           (castMember) => !draftedIds.includes(castMember._id)
@@ -79,15 +87,18 @@ function Game() {
       });
       setGroup(updatedGroupMembers);
     }
-  }, [draftedData, groupMemberData]);
+  }, [draftedData, groupMemberData, getUser, group._id]);
 
   // AUTHENTICATED USER DATA
   useEffect(() => {
-    if (loggedIn) {
+    if (loggedIn && group._id) {
+      // Ensure loggedIn and group ID exist
       const username = Auth.getProfile().authenticatedPerson.username;
-      getUser({ variables: { username } });
+      getUser({
+        variables: { groupId: group._id, username }, // Pass groupId variable
+      });
     }
-  }, [loggedIn, getUser]);
+  }, [loggedIn, group._id, getUser]);
 
   // CHECK IF USER HAS JOINED GAME
   useEffect(() => {
