@@ -61,6 +61,7 @@ const typeDefs = `
     group(_id: ID!): Group
     groupGame(groupId: ID!): [Game]
     user(username: String!): User
+    usersByGroup(groupId: ID!): [User!]!
     groupMembers(groupId: ID!): [User]
     groupGamePhotos(username: String!): [Photos]
     castMembers: [CastMember]

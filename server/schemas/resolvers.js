@@ -28,6 +28,15 @@ const resolvers = {
       ]);
     },
 
+    usersByGroup: async (_, { groupId }, context) => {
+      // Check authentication or permissions as needed
+
+      // Fetch users based on group ID
+      const users = await User.find({ groupId }); // Example assuming Mongoose for MongoDB
+
+      return users;
+    },
+
     groupMembers: async (parent, { groupId }) => {
       return await User.find({ groups: { _id: groupId } }).populate("groups");
     },

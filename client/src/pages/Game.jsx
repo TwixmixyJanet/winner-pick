@@ -38,29 +38,28 @@ function Game() {
   const { loading: draftedLoading, data: draftedData } = useQuery(
     GET_DRAFTED_CAST_MEMBERS
   );
+  const [getUser, userData] = useLazyQuery(QUERY_USER);
 
   const {
     loading: groupMemberLoading,
     data: groupMemberData,
     error: groupMemberError,
   } = useQuery(QUERY_GROUP_MEMBER, {
-    variables: { groupId: group._id }, // Assuming group._id is available
-    skip: !group._id, // Skip the query if group._id is not available
+    variables: { groupId: group._id },
+    skip: !group._id,
   });
 
+  // GAME & GROUP DATA
   useEffect(() => {
     if (data) {
       setGame(data.game);
+      if (data.game.groups && data.game.groups.name) {
+        setGroup(data.game.groups);
+      }
     }
-  }, [data, loading, error]);
+  }, [data]);
 
-  useEffect(() => {
-    if (data && data.game && data.game.groups && data.game.groups.name) {
-      setGroup(data.game.groups);
-    }
-  }, [data, loading, error]);
-
-  // ROSTER DRAFTING
+  // ROSTER DRAFTING & GROUP MEMBER DATA
   useEffect(() => {
     if (
       draftedData &&
@@ -72,6 +71,14 @@ function Game() {
       const draftedIds = draftedCastMembers.map((castMember) => castMember._id);
       setDraftedCastMemberIds(draftedIds);
 
+      // Get the username from the authenticated user's profile
+      const username = Auth.getProfile().authenticatedPerson.username;
+
+      // Call the QUERY_GROUP_MEMBER with the username variable
+      getUser({
+        variables: { groupId: group._id, username }, // Pass groupId and username variables
+      });
+
       const updatedGroupMembers = groupMemberData.groupMembers.map((user) => {
         const updatedRoster = user.roster.filter(
           (castMember) => !draftedIds.includes(castMember._id)
@@ -80,23 +87,20 @@ function Game() {
       });
       setGroup(updatedGroupMembers);
     }
-  }, [draftedData, groupMemberData]);
+  }, [draftedData, groupMemberData, getUser, group._id]);
 
-  const handleReturnToGames = () => {
-    // Use the navigate function to navigate back
-    navigate(-1); // This is equivalent to navigating back one step
-  };
-
-  const [getUser, userData] = useLazyQuery(QUERY_USER);
-
+  // AUTHENTICATED USER DATA
   useEffect(() => {
-    if (loggedIn) {
+    if (loggedIn && group._id) {
+      // Ensure loggedIn and group ID exist
+      const username = Auth.getProfile().authenticatedPerson.username;
       getUser({
-        variables: { username: Auth.getProfile().authenticatedPerson.username },
+        variables: { groupId: group._id, username }, // Pass groupId variable
       });
     }
-  }, [data, loggedIn, getUser]);
+  }, [loggedIn, group._id, getUser]);
 
+  // CHECK IF USER HAS JOINED GAME
   useEffect(() => {
     if (
       userData &&
@@ -109,6 +113,11 @@ function Game() {
       }
     }
   }, [userData, gameId]);
+
+  const handleReturnToGames = () => {
+    // Use the navigate function to navigate back
+    navigate(-1); // This is equivalent to navigating back one step
+  };
 
   const joinHandler = async () => {
     const { data } = await joinGame({
@@ -180,32 +189,19 @@ function Game() {
                     </div>
                   </div>
                   <div>
-                    {loggedIn !== false ? (
-                      <>
-                        {joined !== false ? (
-                          <div
-                            className="badge badge-light p-auto"
-                            onClick={leaveHandler}
-                          >
-                            <i
-                              className="fa-solid fa-thumbtack fa-2x p-auto"
-                              style={{ color: "#da6d44" }}
-                            ></i>
-                          </div>
-                        ) : (
-                          <div
-                            className="badge badge-light p-auto"
-                            onClick={joinHandler}
-                          >
-                            <i
-                              className="fa-solid fa-thumbtack fa-2x p-auto"
-                              style={{ color: "#e4b54b" }}
-                            ></i>
-                          </div>
-                        )}
-                      </>
-                    ) : (
-                      <></>
+                    {/* Display join/leave button based on authentication */}
+                    {loggedIn !== false && (
+                      <div
+                        className="badge badge-light p-auto"
+                        onClick={joined !== false ? leaveHandler : joinHandler}
+                      >
+                        <i
+                          className="fa-solid fa-thumbtack fa-2x p-auto"
+                          style={{
+                            color: joined !== false ? "#da6d44" : "#e4b54b",
+                          }}
+                        ></i>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -232,14 +228,14 @@ function Game() {
                 <div className="row">
                   {/* Cast Members */}
                   <div className="col-md-6 mb-1">
-                    {game.castMembers ? (
+                    {game.castMembers && (
                       <div>
                         <h3 className="field-title m-0">Cast Members:</h3>{" "}
                         {game.castMembers.map((castMember) => (
                           <div key={castMember._id}>
                             {castMember.name}
                             <i
-                              className="fas fa-plus-circle"
+                              className="fas fa-plus-circle plusbutton"
                               style={{ marginLeft: "5px", cursor: "pointer" }}
                               onClick={() =>
                                 draftCastMember({
@@ -247,17 +243,10 @@ function Game() {
                                 })
                               }
                             ></i>
-
-                            {/* Optionally, display the selected user */}
-                            {selectedUsers[castMember._id] && (
-                              <span style={{ marginLeft: "5px" }}>
-                                Selected user: {selectedUsers[castMember._id]}
-                              </span>
-                            )}
                           </div>
                         ))}
                       </div>
-                    ) : null}
+                    )}
                   </div>
                   {/* Cast Members End */}
 
@@ -273,7 +262,6 @@ function Game() {
                                 <i className="fas fa-user fa-lg m-2"></i>
                                 <div className="d-flex flex-column">
                                   <h6>{user.username}</h6>
-                                  {/* Optionally, display additional user information */}
                                   <p>
                                     {user.firstName} {user.lastName}
                                   </p>
@@ -282,12 +270,12 @@ function Game() {
                                   <ul>
                                     {user.roster &&
                                       user.roster
-                                        .filter((castMember) => {
-                                          // Check if the cast member is not drafted
-                                          return !draftedCastMemberIds.includes(
-                                            castMember._id
-                                          );
-                                        })
+                                        .filter(
+                                          (castMember) =>
+                                            !draftedCastMemberIds.includes(
+                                              castMember._id
+                                            )
+                                        )
                                         .map((castMember, index) => (
                                           <li key={index}>{castMember.name}</li>
                                         ))}
@@ -305,6 +293,7 @@ function Game() {
             </div>
           </div>
           <div className="m-4">
+            {/* Return to Games button */}
             <Link to="/">
               <div
                 className="badge bg-secondary"
@@ -317,7 +306,8 @@ function Game() {
           </div>
         </div>
       ) : null}
-      {loading ? <div>Loading...</div> : null}
+      {/* Display loading message */}
+      {loading && <div>Loading...</div>}
     </>
   );
 }
