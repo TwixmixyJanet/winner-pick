@@ -117,6 +117,7 @@ Copyright (c) 2023 Janet Webster
 If you would like to contribute to the application, please feel free to clone it down and submit pull requests to be reviewed. If you make a contribution, go ahead and add your name and preferred URL to the list below.
 
 - [Kyle Vance](https://github.com/KVance1010)
+- [Bayo Fodeke](https://github.com/bfodeke)
 
 ## Authors
 

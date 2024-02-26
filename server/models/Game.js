@@ -18,10 +18,6 @@ const gameSchema = new Schema({
     type: String,
     required: true,
   },
-  // castMembers: {
-  //   type: [String],
-  //   required: true,
-  // },
   numMembers: {
     type: Number,
     required: true,
@@ -45,6 +41,16 @@ const gameSchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: "CastMember",
+    },
+  ],
+  draftedMembers: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "CastMember",
+    },
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
     },
   ],
 });
