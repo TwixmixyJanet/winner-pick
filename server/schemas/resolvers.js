@@ -68,6 +68,34 @@ const resolvers = {
     castMember: async (parent, { _id }) => {
       return await CastMember.findById(_id);
     },
+    draftedCastMembersForUserInGame: async (_, { userId, gameId }) => {
+      try {
+        // Find the game by ID
+        const game = await Game.findById(gameId);
+
+        // Check if the game exists
+        if (!game) {
+          throw new Error("Game not found");
+        }
+
+        // Check if the user is a member of the game
+        if (!game.users.includes(userId)) {
+          throw new Error("User is not a member of this game");
+        }
+
+        // Find all cast members that have been drafted for this user in this game
+        const draftedCastMembers = await CastMember.find({
+          _id: { $in: game.draftedMembers },
+          user: userId,
+        });
+
+        return draftedCastMembers;
+      } catch (error) {
+        throw new Error(
+          `Failed to fetch drafted cast members for user in game: ${error.message}`
+        );
+      }
+    },
     elimination: async () => {
       return await Elimination.find();
     },
@@ -258,13 +286,26 @@ const resolvers = {
       throw new AuthenticationError("You need to be logged in!");
     },
 
-    draftCastMember: async (_, { castMemberId }, context) => {
+    draftCastMemberForGame: async (_, { gameId, castMemberId }, context) => {
       // Check if the user is authenticated
       if (!context.user) {
         throw new Error("User not authenticated");
       }
 
       try {
+        // Find the game by ID
+        const game = await Game.findById(gameId);
+
+        // Check if the game exists
+        if (!game) {
+          throw new Error("Game not found");
+        }
+
+        // Check if the user is a member of the game
+        if (!game.users.includes(context.user._id)) {
+          throw new Error("You are not a member of this game");
+        }
+
         // Find the cast member by ID
         const castMember = await CastMember.findById(castMemberId);
 
@@ -273,76 +314,53 @@ const resolvers = {
           throw new Error("Cast member not found");
         }
 
-        // Check if the cast member is already owned by another user
-        if (castMember.user) {
-          throw new Error("Cast member is already owned by another user");
-        }
+        // Draft the cast member for the game
+        game.draftedMembers.push(castMemberId);
+        await game.save();
 
-        // Update the cast member to associate it with the current user
-        castMember.user = context.user._id;
-        await castMember.save();
-
-        return castMember;
+        return game;
       } catch (error) {
-        throw new Error(`Failed to draft cast member: ${error.message}`);
-      }
-    },
-
-    undraftCastMember: async (_, { castMemberId }, context) => {
-      // Check if the user is authenticated
-      if (!context.user) {
-        throw new Error("User not authenticated");
-      }
-
-      try {
-        // Find the cast member by ID
-        const castMember = await CastMember.findById(castMemberId);
-
-        // Check if the cast member exists
-        if (!castMember) {
-          throw new Error("Cast member not found");
-        }
-
-        // Check if the cast member is owned by the current user
-        if (
-          !castMember.user ||
-          castMember.user.toString() !== context.user._id.toString()
-        ) {
-          throw new Error("You do not own this cast member");
-        }
-
-        // Unassociate the cast member from the user
-        castMember.user = null;
-        await castMember.save();
-
-        return castMember;
-      } catch (error) {
-        throw new Error(`Failed to undraft cast member: ${error.message}`);
-      }
-    },
-  },
-
-  User: {
-    draftedCastMembers: async (parent, args, context) => {
-      try {
-        // Extract the game ID from the parent user object
-        const gameIdList = parent.games.map((game) => game._id);
-
-        // Fetch all users in the same groups as the game
-        const usersInSameGroups = await User.find({
-          groups: { $in: parent.groups },
-        });
-
-        // Extract drafted cast members from users who have the game in their games list
-        const draftedCastMembers = usersInSameGroups.flatMap((user) =>
-          user.draftedCastMembers.filter((castMember) =>
-            gameIdList.includes(castMember.game)
-          )
+        throw new Error(
+          `Failed to draft cast member for game: ${error.message}`
         );
+      }
+    },
 
-        return draftedCastMembers;
+    undraftCastMemberForGame: async (_, { gameId, castMemberId }, context) => {
+      // Check if the user is authenticated
+      if (!context.user) {
+        throw new Error("User not authenticated");
+      }
+
+      try {
+        // Find the game by ID
+        const game = await Game.findById(gameId);
+
+        // Check if the game exists
+        if (!game) {
+          throw new Error("Game not found");
+        }
+
+        // Check if the user is a member of the game
+        if (!game.users.includes(context.user._id)) {
+          throw new Error("You are not a member of this game");
+        }
+
+        // Check if the cast member is drafted for the game
+        const index = game.draftedMembers.indexOf(castMemberId);
+        if (index === -1) {
+          throw new Error("Cast member is not drafted for this game");
+        }
+
+        // Undraft the cast member for the game
+        game.draftedMembers.splice(index, 1);
+        await game.save();
+
+        return game;
       } catch (error) {
-        throw new Error(`Failed to get drafted cast members: ${error.message}`);
+        throw new Error(
+          `Failed to undraft cast member for game: ${error.message}`
+        );
       }
     },
   },

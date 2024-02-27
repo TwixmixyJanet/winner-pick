@@ -25,7 +25,6 @@ const typeDefs = `
     groups: [Group]
     games: [Game]
     joinedGames: [Game]
-    draftedCastMembers: [CastMember] 
    }
 
   type CastMember {
@@ -67,6 +66,7 @@ const typeDefs = `
     castMembers: [CastMember]
     castMember(_id: ID!): CastMember
     elimination: [Elimination]
+    draftedCastMembersForUserInGame(userId: ID!, gameId: ID!): [CastMember]
   }
 
   type Mutation {
@@ -84,8 +84,8 @@ const typeDefs = `
     updateCastMember(_id: ID!, name: String): CastMember
     deleteCastMember(_id: ID!): CastMember
     eliminated(_id: ID!): CastMember
-    draftCastMember(castMemberId: ID!): CastMember
-    undraftCastMember(castMemberId: ID!): CastMember
+    draftCastMemberForGame(gameId: ID!, castMemberId: ID!): Game
+    undraftCastMemberForGame(gameId: ID!, castMemberId: ID!): Game
   }
 `;
 

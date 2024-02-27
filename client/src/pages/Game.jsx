@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
 
+// IMPORT QUERIES & MUTATIONS
 import {
   QUERY_GAME,
   QUERY_USER,
@@ -12,9 +13,10 @@ import {
 import {
   JOIN_GAME,
   LEAVE_GAME,
-  DRAFT_CAST_MEMBER,
-  UNDRAFT_CAST_MEMBER,
+  DRAFT_CAST_MEMBER_FOR_GAME,
+  UNDRAFT_CAST_MEMBER_FOR_GAME,
 } from "../utils/mutations";
+
 import "./style.css";
 import Auth from "../utils/auth";
 
@@ -23,22 +25,41 @@ function Game() {
   const navigate = useNavigate();
   const loggedIn = Auth.loggedIn();
 
+  // STATE
   const [game, setGame] = useState({});
   const [group, setGroup] = useState({});
-  const [selectedUsers, setSelectedUsers] = useState({});
   const [joined, setJoined] = useState(false);
   const [draftedCastMemberIds, setDraftedCastMemberIds] = useState([]);
 
+  // MUTATIONS
   const [joinGame] = useMutation(JOIN_GAME);
   const [leaveGame] = useMutation(LEAVE_GAME);
+
+  const [draftCastMember] = useMutation(DRAFT_CAST_MEMBER_FOR_GAME);
+  const [undraftCastMember] = useMutation(UNDRAFT_CAST_MEMBER_FOR_GAME);
+
+  // QUERIES
+  const [getUser, { loading: userLoading, data: userData, error: userError }] =
+    useLazyQuery(QUERY_USER);
+
+  if (userData && userData.user) {
+    const { _id, firstName, lastName, username } = userData.user;
+    console.log(`User ID: ${_id}`);
+    console.log(`First Name: ${firstName}`);
+    console.log(`Last Name: ${lastName}`);
+    console.log(`Username: ${username}`);
+  }
 
   const { loading, data, error } = useQuery(QUERY_GAME, {
     variables: { id: gameId },
   });
+
   const { loading: draftedLoading, data: draftedData } = useQuery(
-    GET_DRAFTED_CAST_MEMBERS
+    GET_DRAFTED_CAST_MEMBERS,
+    {
+      variables: { userId: Auth.getProfile().id, gameId: gameId },
+    }
   );
-  const [getUser, userData] = useLazyQuery(QUERY_USER);
 
   const {
     loading: groupMemberLoading,
@@ -133,32 +154,16 @@ function Game() {
     setJoined(false);
   };
 
-  const handleUserSelect = (castMemberId, userId) => {
-    setSelectedUsers({ ...selectedUsers, [castMemberId]: userId });
+  const handleDraft = (castMemberId) => {
+    draftCastMember({
+      variables: { castMemberId },
+    });
   };
 
-  const [draftCastMember] = useMutation(DRAFT_CAST_MEMBER);
-  const DraftCastMemberButton = ({ castMemberId }) => {
-    const handleDraft = () => {
-      draftCastMember({
-        variables: { castMemberId },
-        // You can include more options here, like refetchQueries, onError, etc.
-      });
-    };
-
-    return <button onClick={handleDraft}>Draft</button>;
-  };
-
-  const [undraftCastMember] = useMutation(UNDRAFT_CAST_MEMBER);
-  const UndraftCastMemberButton = ({ castMemberId }) => {
-    const handleUndraft = () => {
-      undraftCastMember({
-        variables: { castMemberId },
-        // You can include more options here, like refetchQueries, onError, etc.
-      });
-    };
-
-    return <button onClick={handleUndraft}>Undraft</button>;
+  const handleUndraft = (castMemberId) => {
+    undraftCastMember({
+      variables: { castMemberId },
+    });
   };
 
   return (
