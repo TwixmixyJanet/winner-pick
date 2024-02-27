@@ -155,12 +155,11 @@ export const QUERY_ALL_ELIMINATIONS = gql`
 `;
 
 export const GET_DRAFTED_CAST_MEMBERS = gql`
-  query GetDraftedCastMembers($username: String!) {
-    user(username: $username) {
-      draftedCastMembers {
-        _id
-        name
-      }
-    }
+query GetDraftedCastMembers($userId: ID!, $gameId: ID!) {
+  draftedCastMembersForUserInGame(userId: $userId, gameId: $gameId) {
+    _id
+    name
+    // Include any other fields you want to retrieve for each drafted cast member
   }
+}
 `;
