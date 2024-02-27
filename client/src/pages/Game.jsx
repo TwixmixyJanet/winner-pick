@@ -12,8 +12,8 @@ import {
 import {
   JOIN_GAME,
   LEAVE_GAME,
-  DRAFT_CAST_MEMBER,
-  UNDRAFT_CAST_MEMBER,
+  DRAFT_CAST_MEMBER_FOR_GAME,
+  UNDRAFT_CAST_MEMBER_FOR_GAME,
 } from "../utils/mutations";
 import "./style.css";
 import Auth from "../utils/auth";
@@ -32,11 +32,17 @@ function Game() {
   const [joinGame] = useMutation(JOIN_GAME);
   const [leaveGame] = useMutation(LEAVE_GAME);
 
+  const [draftCastMember] = useMutation(DRAFT_CAST_MEMBER_FOR_GAME);
+  const [undraftCastMember] = useMutation(UNDRAFT_CAST_MEMBER_FOR_GAME);
+
   const { loading, data, error } = useQuery(QUERY_GAME, {
     variables: { id: gameId },
   });
   const { loading: draftedLoading, data: draftedData } = useQuery(
-    GET_DRAFTED_CAST_MEMBERS
+    GET_DRAFTED_CAST_MEMBERS,
+    {
+      variables: { userId: Auth.getProfile().id, gameId: gameId },
+    }
   );
   const [getUser, userData] = useLazyQuery(QUERY_USER);
 
@@ -137,28 +143,16 @@ function Game() {
     setSelectedUsers({ ...selectedUsers, [castMemberId]: userId });
   };
 
-  const [draftCastMember] = useMutation(DRAFT_CAST_MEMBER);
-  const DraftCastMemberButton = ({ castMemberId }) => {
-    const handleDraft = () => {
-      draftCastMember({
-        variables: { castMemberId },
-        // You can include more options here, like refetchQueries, onError, etc.
-      });
-    };
-
-    return <button onClick={handleDraft}>Draft</button>;
+  const handleDraft = (castMemberId) => {
+    draftCastMember({
+      variables: { castMemberId },
+    });
   };
 
-  const [undraftCastMember] = useMutation(UNDRAFT_CAST_MEMBER);
-  const UndraftCastMemberButton = ({ castMemberId }) => {
-    const handleUndraft = () => {
-      undraftCastMember({
-        variables: { castMemberId },
-        // You can include more options here, like refetchQueries, onError, etc.
-      });
-    };
-
-    return <button onClick={handleUndraft}>Undraft</button>;
+  const handleUndraft = (castMemberId) => {
+    undraftCastMember({
+      variables: { castMemberId },
+    });
   };
 
   return (

@@ -240,17 +240,15 @@ export const DRAFT_CAST_MEMBER_FOR_GAME = gql`
     draftCastMemberForGame(gameId: $gameId, castMemberId: $castMemberId) {
       _id
       name
-      // Include any other fields you want to retrieve after drafting the cast member
     }
   }
 `;
 
 export const UNDRAFT_CAST_MEMBER_FOR_GAME = gql`
-mutation UndraftCastMemberForGame($gameId: ID!, $castMemberId: ID!) {
-  undraftCastMemberForGame(gameId: $gameId, castMemberId: $castMemberId) {
-    _id
-    name
-    // Include any other fields you want to retrieve after undrafting the cast member
+  mutation UndraftCastMemberForGame($gameId: ID!, $castMemberId: ID!) {
+    undraftCastMemberForGame(gameId: $gameId, castMemberId: $castMemberId) {
+      _id
+      name
+    }
   }
-}
 `;
