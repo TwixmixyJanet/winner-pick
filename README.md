@@ -118,6 +118,7 @@ If you would like to contribute to the application, please feel free to clone it
 
 - [Kyle Vance](https://github.com/KVance1010)
 - [Bayo Fodeke](https://github.com/bfodeke)
+- [Christopher Smith](https://www.linkedin.com/in/smithc-dev/)
 
 ## Authors
 
