@@ -1,9 +1,6 @@
-/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
-
-// IMPORT QUERIES & MUTATIONS
 import {
   QUERY_GAME,
   QUERY_USER,
@@ -16,7 +13,6 @@ import {
   DRAFT_CAST_MEMBER_FOR_GAME,
   UNDRAFT_CAST_MEMBER_FOR_GAME,
 } from "../utils/mutations";
-
 import "./style.css";
 import Auth from "../utils/auth";
 
@@ -243,7 +239,7 @@ function Game() {
                               className="fas fa-plus-circle plusbutton"
                               style={{ marginLeft: "5px", cursor: "pointer" }}
                               onClick={() =>
-                                draftCastMember({
+                                handleDraft({
                                   variables: { castMemberId: castMember._id },
                                 })
                               }

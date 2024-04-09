@@ -50,6 +50,12 @@ const userSchema = new Schema({
       ref: "CastMember",
     },
   ],
+  rosters: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Roster",
+    },
+  ],
   joinedGames: [
     {
       type: Schema.Types.ObjectId,
