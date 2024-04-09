@@ -217,10 +217,10 @@ function Game() {
                     {/* Number of Cast Members */}
                     <div className="col-md-6 mb-2">
                       <div className="field-title m-0 d-flex text-start">
-                        Number of Cast Members:{" "}
+                        Coin Buy-In{" "}
                       </div>
                       <div className="textwrap d-flex text-start">
-                        {game.numMembers}
+                        {game.coinBuyIn}
                       </div>
                     </div>
                   </div>
