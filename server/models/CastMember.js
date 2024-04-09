@@ -22,6 +22,12 @@ const castMemberSchema = new Schema({
   //     ref: "Group",
   //   },
   // ],
+  rosters: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Roster",
+    },
+  ],
   users: {
     type: Schema.Types.ObjectId,
     ref: "User",

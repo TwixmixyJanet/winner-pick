@@ -56,6 +56,12 @@ const userSchema = new Schema({
       ref: "Roster",
     },
   ],
+  eliminations: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Elimination",
+    },
+  ],
   joinedGames: [
     {
       type: Schema.Types.ObjectId,

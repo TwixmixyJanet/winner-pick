@@ -65,7 +65,7 @@ Data Structure:
   - many users to many groups
   - many users to many games
   - one user to one cast member
-  - many users to many eliminations
+  - one users to many eliminations
   - one users to many rosters
 - Groups
   - many groups to many users
@@ -80,12 +80,14 @@ Data Structure:
   - many rosters to one game
   - one roster to one cast member
 - Cast Members
-  - many cast members to one group
+  - many cast members to one game
   - one cast member to one user
   - one cast member to one roster
   - one cast members to one eliminations
 - Eliminations
   - one eliminations to one cast members
+  - many eliminations to one game
+  - many eliminations to one user
 
 <br />
 
