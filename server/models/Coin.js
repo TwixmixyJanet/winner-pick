@@ -12,10 +12,6 @@ const coinSchema = new Schema({
     type: Number,
     required: true,
   },
-  quantity: {
-    type: Number,
-    required: true,
-  },
 });
 
 const Coin = mongoose.model("Coin", coinSchema);
