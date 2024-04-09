@@ -340,7 +340,7 @@ db.once("open", async () => {
 
     const rosters = await Roster.insertMany([
       {
-        user: users[0]._id,
+        users: users[0]._id,
         games: games[0]._id,
         castMembers: [
           castMembers[1]._id,

@@ -24,6 +24,7 @@ const typeDefs = `
     password: String!
     groups: [Group]
     games: [Game]
+    castMembers: [CastMember]
     joinedGames: [Game]
    }
 
@@ -53,6 +54,12 @@ const typeDefs = `
     photos: [String]
   }
 
+  type Roster {
+    _id: ID
+    users: [User]
+    castMembers: [CastMember]
+  }
+
   type Query {
     games: [Game]
     game(_id: ID!): Game
@@ -65,9 +72,9 @@ const typeDefs = `
     groupGamePhotos(username: String!): [Photos]
     castMembers: [CastMember]
     castMember(_id: ID!): CastMember
-    elimination: [Elimination]
-    draftedCastMembersForUserInGame(userId: ID!, gameId: ID!): [CastMember]
-  }
+    rosters: [Roster]
+    roster(_id: ID!): Roster
+ }
 
   type Mutation {
     addUser(firstName: String!, lastName: String!, username: String!, email: String!, password: String!): Auth

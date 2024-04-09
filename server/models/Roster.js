@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const rosterSchema = new Schema({
-  user: {
+  users: {
     type: Schema.Types.ObjectId,
     ref: "User",
   },

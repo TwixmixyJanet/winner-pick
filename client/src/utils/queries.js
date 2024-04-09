@@ -20,10 +20,10 @@ export const QUERY_USER = gql`
         name
         photo
         description
-        # castMembers {
-        #   _id
-        #   name
-        # }
+        castMembers {
+          _id
+          name
+        }
         coinBuyIn
         createdAt
       }
@@ -41,10 +41,10 @@ export const QUERY_ALL_GAMES = gql`
       name
       photo
       description
-      # castMembers {
-      #   _id
-      #   name
-      # } need to add this back in once I figure out why it's having a null name issue
+      castMembers {
+        _id
+        name
+      }
       coinBuyIn
       createdAt
       groups {
@@ -101,10 +101,10 @@ export const QUERY_GROUP_GAME = gql`
       name
       photo
       description
-      # castMembers {
-      #  _id
-      #  name
-      # }
+      castMembers {
+        _id
+        name
+      }
       coinBuyIn
       createdAt
       groups {
@@ -145,20 +145,34 @@ export const QUERY_ALL_CAST_MEMBERS = gql`
   }
 `;
 
-export const QUERY_ALL_ELIMINATIONS = gql`
-  query getAllEliminations {
-    eliminations {
+export const QUERY_ALL_ROSTERS = gql`
+  query getAllRosters {
+    rosters {
       _id
-      order
+      users {
+        _id
+        username
+      }
+      castMembers {
+        _id
+        name
+      }
     }
   }
 `;
 
-export const GET_DRAFTED_CAST_MEMBERS = gql`
-  query GetDraftedCastMembers($userId: ID!, $gameId: ID!) {
-    draftedCastMembersForUserInGame(userId: $userId, gameId: $gameId) {
+export const QUERY_ROSTER = gql`
+  query getSingleRoster($id: ID!) {
+    roster(_id: $id) {
       _id
-      name
+      users {
+        _id
+        username
+      }
+      castMembers {
+        _id
+        name
+      }
     }
   }
 `;
