@@ -1,4 +1,12 @@
-const { User, Game, Group, CastMember, Episode } = require("../models");
+const {
+  User,
+  Game,
+  Group,
+  CastMember,
+  Elimination,
+  Roster,
+  Coin,
+} = require("../models");
 const { signToken, AuthenticationError } = require("../utils/auth");
 
 const resolvers = {
@@ -171,7 +179,7 @@ const resolvers = {
         name: args.name,
         photo: args.photo,
         description: args.description,
-        numMembers: args.numMembers,
+        coinBuyIn: args.coinBuyIn,
         groupId: args.groupId,
         castMembers: [],
       });
@@ -199,7 +207,7 @@ const resolvers = {
 
     updateGame: async (
       parent,
-      { _id, name, photo, description, castMembers, numMembers, groupId }
+      { _id, name, photo, description, castMembers, coinBuyIn, groupId }
     ) => {
       const updateGame = await Game.findByIdAndUpdate(
         { _id: _id },
@@ -208,7 +216,7 @@ const resolvers = {
           photo: photo,
           description: description,
           castMembers: castMembers,
-          numMembers: numMembers,
+          coinBuyIn: coinBuyIn,
           groups: groupId,
         },
         { new: true }

@@ -24,7 +24,7 @@ export const QUERY_USER = gql`
         #   _id
         #   name
         # }
-        numMembers
+        coinBuyIn
         createdAt
       }
       joinedGames {
@@ -45,7 +45,7 @@ export const QUERY_ALL_GAMES = gql`
       #   _id
       #   name
       # } need to add this back in once I figure out why it's having a null name issue
-      numMembers
+      coinBuyIn
       createdAt
       groups {
         _id
@@ -66,7 +66,7 @@ export const QUERY_GAME = gql`
         _id
         name
       }
-      numMembers
+      coinBuyIn
       createdAt
       groups {
         _id
@@ -105,7 +105,7 @@ export const QUERY_GROUP_GAME = gql`
       #  _id
       #  name
       # }
-      numMembers
+      coinBuyIn
       createdAt
       groups {
         _id

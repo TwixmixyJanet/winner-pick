@@ -90,7 +90,7 @@ export const ADD_GAME = gql`
     $photo: String!
     $description: String!
     $castMembers: [ID!]!
-    $numMembers: Int!
+    $coinBuyIn: Int!
     $groupId: ID
   ) {
     addGame(
@@ -98,7 +98,7 @@ export const ADD_GAME = gql`
       photo: $photo
       description: $description
       castMembers: $castMembers
-      numMembers: $numMembers
+      coinBuyIn: $coinBuyIn
       groupId: $groupId
     ) {
       _id
@@ -109,7 +109,7 @@ export const ADD_GAME = gql`
         _id # Include subfields for each CastMember
         name # Include any other desired fields
       }
-      numMembers
+      coinBuyIn
       createdAt
       groups {
         _id
@@ -125,7 +125,7 @@ export const UPDATE_GAME = gql`
     $photo: String!
     $description: String!
     $castMembers: [ID!]! # Updated to accept an array of ID values
-    $numMembers: Int!
+    $coinBuyIn: Int!
     $groupId: ID
   ) {
     updateGame(
@@ -134,7 +134,7 @@ export const UPDATE_GAME = gql`
       photo: $photo
       description: $description
       castMembers: $castMembers
-      numMembers: $numMembers
+      coinBuyIn: $coinBuyIn
       groupId: $groupId
     ) {
       _id
@@ -145,7 +145,7 @@ export const UPDATE_GAME = gql`
         _id
         name
       }
-      numMembers
+      coinBuyIn
       createdAt
       groups {
         _id
@@ -166,7 +166,7 @@ export const DELETE_GAME = gql`
         _id
         name
       }
-      numMembers
+      coinBuyIn
       createdAt
       groups {
         _id

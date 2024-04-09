@@ -10,7 +10,7 @@ const typeDefs = `
     photo: String!
     description: String!
     castMembers: [CastMember]
-    numMembers: Int!
+    coinBuyIn: Int!
     createdAt: String!
     groups: Group
   }
@@ -75,8 +75,8 @@ const typeDefs = `
     addGroup(name: String!): Group
     joinGroup(groupId: ID!): User
     leaveGroup(groupId: ID!): User
-    addGame(name: String!, photo: String!, description: String!, castMembers: [ID!]!, numMembers: Int!, groupId: ID): Game
-    updateGame(_id: ID!, name: String, photo: String, description: String, castMembers: [ID], numMembers: Int, groupId: ID): Game
+    addGame(name: String!, photo: String!, description: String!, castMembers: [ID!]!, coinBuyIn: Int!, groupId: ID): Game
+    updateGame(_id: ID!, name: String, photo: String, description: String, castMembers: [ID], coinBuyIn: Int, groupId: ID): Game
     deleteGame(_id: ID!): Game
     joinGame(_id: ID!): User
     leaveGame(_id: ID!): User
