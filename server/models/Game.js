@@ -18,7 +18,7 @@ const gameSchema = new Schema({
     type: String,
     required: true,
   },
-  numMembers: {
+  coinBuyIn: {
     type: Number,
     required: true,
   },
