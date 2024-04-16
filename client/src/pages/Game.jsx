@@ -1,14 +1,13 @@
-/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
-
-// IMPORT QUERIES & MUTATIONS
 import {
   QUERY_GAME,
   QUERY_USER,
   QUERY_GROUP_MEMBER,
-  GET_DRAFTED_CAST_MEMBERS,
+  // GET_DRAFTED_CAST_MEMBERS,
+  QUERY_ALL_ROSTERS,
+  QUERY_ROSTER,
 } from "../utils/queries";
 import {
   JOIN_GAME,
@@ -16,7 +15,6 @@ import {
   DRAFT_CAST_MEMBER_FOR_GAME,
   UNDRAFT_CAST_MEMBER_FOR_GAME,
 } from "../utils/mutations";
-
 import "./style.css";
 import Auth from "../utils/auth";
 
@@ -29,7 +27,8 @@ function Game() {
   const [game, setGame] = useState({});
   const [group, setGroup] = useState({});
   const [joined, setJoined] = useState(false);
-  const [draftedCastMemberIds, setDraftedCastMemberIds] = useState([]);
+  const [allRosters, setAllRosters] = useState([]);
+  const [roster, setRoster] = useState([]);
 
   // MUTATIONS
   const [joinGame] = useMutation(JOIN_GAME);
@@ -54,12 +53,16 @@ function Game() {
     variables: { id: gameId },
   });
 
-  const { loading: draftedLoading, data: draftedData } = useQuery(
-    GET_DRAFTED_CAST_MEMBERS,
+  const { loading: allRostersLoading, data: allRosterData } = useQuery(
+    QUERY_ALL_ROSTERS,
     {
       variables: { userId: Auth.getProfile().id, gameId: gameId },
     }
   );
+
+  const { loading: rosterLoading, data: rosterData } = useQuery(QUERY_ROSTER, {
+    variables: { userId: Auth.getProfile().id, gameId: gameId },
+  });
 
   const {
     loading: groupMemberLoading,
@@ -80,35 +83,16 @@ function Game() {
     }
   }, [data]);
 
-  // ROSTER DRAFTING & GROUP MEMBER DATA
+  // ROSTER DATA
   useEffect(() => {
-    if (
-      draftedData &&
-      draftedData.user &&
-      draftedData.user.draftedCastMembers
-    ) {
-      const draftedCastMembers = draftedData.user.draftedCastMembers;
-      // Extract IDs of drafted cast members
-      const draftedIds = draftedCastMembers.map((castMember) => castMember._id);
-      setDraftedCastMemberIds(draftedIds);
-
-      // Get the username from the authenticated user's profile
-      const username = Auth.getProfile().authenticatedPerson.username;
-
-      // Call the QUERY_GROUP_MEMBER with the username variable
-      getUser({
-        variables: { groupId: group._id, username }, // Pass groupId and username variables
-      });
-
-      const updatedGroupMembers = groupMemberData.groupMembers.map((user) => {
-        const updatedRoster = user.roster.filter(
-          (castMember) => !draftedIds.includes(castMember._id)
-        );
-        return { ...user, roster: updatedRoster };
-      });
-      setGroup(updatedGroupMembers);
+    if (allRosterData && allRosterData.rosters) {
+      setAllRosters(allRosterData.rosters);
     }
-  }, [draftedData, groupMemberData, getUser, group._id]);
+
+    if (rosterData && rosterData.roster) {
+      setRoster(rosterData.roster);
+    }
+  }, [allRosterData, rosterData]);
 
   // AUTHENTICATED USER DATA
   useEffect(() => {
@@ -221,10 +205,10 @@ function Game() {
                     {/* Number of Cast Members */}
                     <div className="col-md-6 mb-2">
                       <div className="field-title m-0 d-flex text-start">
-                        Number of Cast Members:{" "}
+                        Coin Buy-In{" "}
                       </div>
                       <div className="textwrap d-flex text-start">
-                        {game.numMembers}
+                        {game.coinBuyIn}
                       </div>
                     </div>
                   </div>
@@ -243,7 +227,7 @@ function Game() {
                               className="fas fa-plus-circle plusbutton"
                               style={{ marginLeft: "5px", cursor: "pointer" }}
                               onClick={() =>
-                                draftCastMember({
+                                handleDraft({
                                   variables: { castMemberId: castMember._id },
                                 })
                               }
@@ -274,16 +258,31 @@ function Game() {
                                   <div>Roster:</div>
                                   <ul>
                                     {user.roster &&
-                                      user.roster
-                                        .filter(
-                                          (castMember) =>
-                                            !draftedCastMemberIds.includes(
-                                              castMember._id
-                                            )
-                                        )
-                                        .map((castMember, index) => (
-                                          <li key={index}>{castMember.name}</li>
-                                        ))}
+                                      user.roster.map((castMember, index) => (
+                                        <li key={index}>
+                                          {castMember.name}{" "}
+                                          {allRosters.find(
+                                            (rosterItem) =>
+                                              rosterItem._id === castMember._id
+                                          ) ? (
+                                            <i
+                                              className="fas fa-minus-circle"
+                                              style={{ cursor: "pointer" }}
+                                              onClick={() =>
+                                                handleUndraft(castMember._id)
+                                              }
+                                            ></i>
+                                          ) : (
+                                            <i
+                                              className="fas fa-plus-circle"
+                                              style={{ cursor: "pointer" }}
+                                              onClick={() =>
+                                                handleDraft(castMember._id)
+                                              }
+                                            ></i>
+                                          )}
+                                        </li>
+                                      ))}
                                   </ul>
                                 </div>
                               </div>

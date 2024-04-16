@@ -1,4 +1,12 @@
-const { User, Game, Group, CastMember, Episode } = require("../models");
+const {
+  User,
+  Game,
+  Group,
+  CastMember,
+  Elimination,
+  Roster,
+  Coin,
+} = require("../models");
 const { signToken, AuthenticationError } = require("../utils/auth");
 
 const resolvers = {
@@ -25,6 +33,8 @@ const resolvers = {
       return await User.findOne({ username: username }).populate([
         "groups",
         "games",
+        "castMembers",
+        "joinedGames",
       ]);
     },
 
@@ -38,7 +48,10 @@ const resolvers = {
     },
 
     groupMembers: async (parent, { groupId }) => {
-      return await User.find({ groups: { _id: groupId } }).populate("groups");
+      return await User.find({ groups: { _id: groupId } }).populate([
+        "groups",
+        "games",
+      ]);
     },
 
     groupGamePhotos: async (parent, { username }) => {
@@ -68,36 +81,11 @@ const resolvers = {
     castMember: async (parent, { _id }) => {
       return await CastMember.findById(_id);
     },
-    draftedCastMembersForUserInGame: async (_, { userId, gameId }) => {
-      try {
-        // Find the game by ID
-        const game = await Game.findById(gameId);
-
-        // Check if the game exists
-        if (!game) {
-          throw new Error("Game not found");
-        }
-
-        // Check if the user is a member of the game
-        if (!game.users.includes(userId)) {
-          throw new Error("User is not a member of this game");
-        }
-
-        // Find all cast members that have been drafted for this user in this game
-        const draftedCastMembers = await CastMember.find({
-          _id: { $in: game.draftedMembers },
-          user: userId,
-        });
-
-        return draftedCastMembers;
-      } catch (error) {
-        throw new Error(
-          `Failed to fetch drafted cast members for user in game: ${error.message}`
-        );
-      }
+    rosters: async () => {
+      return await Roster.find().populate(["users", "castMembers"]);
     },
-    elimination: async () => {
-      return await Elimination.find();
+    roster: async (parent, { _id }) => {
+      return await Roster.findById(_id).populate(["users", "castMembers"]);
     },
   },
 
@@ -171,7 +159,7 @@ const resolvers = {
         name: args.name,
         photo: args.photo,
         description: args.description,
-        numMembers: args.numMembers,
+        coinBuyIn: args.coinBuyIn,
         groupId: args.groupId,
         castMembers: [],
       });
@@ -199,7 +187,7 @@ const resolvers = {
 
     updateGame: async (
       parent,
-      { _id, name, photo, description, castMembers, numMembers, groupId }
+      { _id, name, photo, description, castMembers, coinBuyIn, groupId }
     ) => {
       const updateGame = await Game.findByIdAndUpdate(
         { _id: _id },
@@ -208,7 +196,7 @@ const resolvers = {
           photo: photo,
           description: description,
           castMembers: castMembers,
-          numMembers: numMembers,
+          coinBuyIn: coinBuyIn,
           groups: groupId,
         },
         { new: true }

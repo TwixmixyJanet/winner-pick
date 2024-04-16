@@ -1,5 +1,13 @@
 const db = require("../config/connection");
-const { User, Group, Game, CastMember, Elimination } = require("../models");
+const {
+  User,
+  Group,
+  Game,
+  CastMember,
+  Elimination,
+  Roster,
+  Coin,
+} = require("../models");
 const cleanDB = require("./cleanDB");
 
 db.once("open", async () => {
@@ -9,6 +17,25 @@ db.once("open", async () => {
     await cleanDB("Group", "groups");
     await cleanDB("CastMember", "castmembers");
     await cleanDB("Elimination", "eliminations");
+    await cleanDB("Roster", "rosters");
+    await cleanDB("Coin", "coins");
+
+    const coins = await Coin.insertMany([
+      {
+        name: "Gold",
+        value: 100,
+      },
+      {
+        name: "Silver",
+        value: 50,
+      },
+      {
+        name: "Bronze",
+        value: 25,
+      },
+    ]);
+
+    console.log("💰 coins seeded 💰");
 
     const eliminations = await Elimination.insertMany([
       {
@@ -199,7 +226,7 @@ db.once("open", async () => {
           castMembers[16]._id,
           castMembers[17]._id,
         ],
-        numMembers: 18,
+        coinBuyIn: 18,
         groups: [groups[0]._id],
       },
       {
@@ -209,7 +236,7 @@ db.once("open", async () => {
         description:
           "The Bachelor is an American dating and relationship reality television series that debuted on March 25, 2002, on ABC.",
         castMembers: [castMembers[20]._id],
-        numMembers: 1,
+        coinBuyIn: 1,
         groups: [groups[1]._id],
       },
       {
@@ -219,7 +246,7 @@ db.once("open", async () => {
         description:
           "The Bachelorette is an American reality television dating game show that debuted on ABC on January 8, 2003.",
         castMembers: [castMembers[21]._id],
-        numMembers: 1,
+        coinBuyIn: 1,
         groups: [groups[2]._id],
       },
       {
@@ -229,7 +256,7 @@ db.once("open", async () => {
         description:
           "The Amazing Race is back for its 33rd season! This season, 11 teams will embark on a trek around the world.",
         castMembers: [castMembers[19]._id],
-        numMembers: 1,
+        coinBuyIn: 1,
         groups: [groups[3]._id],
       },
     ]);
@@ -310,6 +337,20 @@ db.once("open", async () => {
       },
     ]);
     console.log("👤 users seeded 👤");
+
+    const rosters = await Roster.insertMany([
+      {
+        users: users[0]._id,
+        games: games[0]._id,
+        castMembers: [
+          castMembers[1]._id,
+          castMembers[5]._id,
+          castMembers[7]._id,
+          castMembers[15]._id,
+        ],
+      },
+    ]);
+    console.log("📋 rosters seeded 📋");
   } catch (err) {
     console.error(err);
     process.exit(1);

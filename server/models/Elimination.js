@@ -9,6 +9,10 @@ const eliminationSchema = new Schema({
     required: true,
     trim: true,
   },
+  users: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
   games: {
     type: Schema.Types.ObjectId,
     ref: "Game",

@@ -32,6 +32,10 @@ const userSchema = new Schema({
     required: true,
     minlength: 5,
   },
+  coins: {
+    type: Schema.Types.ObjectId,
+    ref: "Coin",
+  },
   groups: [
     {
       type: Schema.Types.ObjectId,
@@ -48,6 +52,18 @@ const userSchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: "CastMember",
+    },
+  ],
+  rosters: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Roster",
+    },
+  ],
+  eliminations: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Elimination",
     },
   ],
   joinedGames: [

@@ -65,20 +65,29 @@ Data Structure:
   - many users to many groups
   - many users to many games
   - one user to one cast member
-  - many users to many episodes??
+  - one users to many eliminations
+  - one users to many rosters
 - Groups
   - many groups to many users
   - one group to many games
 - Games
   - one game to many cast members
-  - one game to many episodes
+  - one game to many eliminations
   - many games to one group
+  - one game to many rosters
+    Rosters
+  - many rosters to many users
+  - many rosters to one game
+  - one roster to one cast member
 - Cast Members
-  - many cast members to one group
+  - many cast members to one game
   - one cast member to one user
-  - many cast members to many episodes
+  - one cast member to one roster
+  - one cast members to one eliminations
 - Eliminations
-  - many eliminations to many cast members
+  - one eliminations to one cast members
+  - many eliminations to one game
+  - many eliminations to one user
 
 <br />
 
@@ -118,6 +127,7 @@ If you would like to contribute to the application, please feel free to clone it
 
 - [Kyle Vance](https://github.com/KVance1010)
 - [Bayo Fodeke](https://github.com/bfodeke)
+- [Christopher Smith](https://www.linkedin.com/in/smithc-dev/)
 
 ## Authors
 

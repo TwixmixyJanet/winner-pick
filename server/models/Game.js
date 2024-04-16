@@ -18,7 +18,7 @@ const gameSchema = new Schema({
     type: String,
     required: true,
   },
-  numMembers: {
+  coinBuyIn: {
     type: Number,
     required: true,
   },
@@ -43,16 +43,28 @@ const gameSchema = new Schema({
       ref: "CastMember",
     },
   ],
-  draftedMembers: [
+  eliminations: [
     {
       type: Schema.Types.ObjectId,
-      ref: "CastMember",
-    },
-    {
-      type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Elimination",
     },
   ],
+  rosters: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Roster",
+    },
+  ],
+  // draftedMembers: [
+  //   {
+  //     type: Schema.Types.ObjectId,
+  //     ref: "CastMember",
+  //   },
+  //   {
+  //     type: Schema.Types.ObjectId,
+  //     ref: "User",
+  //   },
+  // ],
 });
 
 const Game = mongoose.model("Game", gameSchema);
